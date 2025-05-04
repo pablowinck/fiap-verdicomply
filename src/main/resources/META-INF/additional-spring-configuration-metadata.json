@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "jwt.secret",
+      "type": "java.lang.String",
+      "description": "Chave secreta usada para assinar tokens JWT."
+    },
+    {
+      "name": "jwt.expiration",
+      "type": "java.lang.Long",
+      "description": "Tempo de expiração do token JWT em milissegundos."
+    },
+    {
+      "name": "jwt.header",
+      "type": "java.lang.String",
+      "description": "Nome do cabeçalho HTTP usado para enviar o token JWT."
+    },
+    {
+      "name": "jwt.prefix",
+      "type": "java.lang.String",
+      "description": "Prefixo usado antes do token JWT no cabeçalho de autorização."
+    }
+  ]
+}

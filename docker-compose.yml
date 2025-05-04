@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecotrack-auditor-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - oracledb
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracledb:1521/XEPDB1
+      - SPRING_DATASOURCE_USERNAME=verdicomply
+      - SPRING_DATASOURCE_PASSWORD=verdicomply
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.OracleDialect
+      - SPRING_PROFILES_ACTIVE=dev
+      # Configurações JWT
+      - JWT_SECRET=3778214125442A472D4B614E645267556B58703273357638792F423F4528472B
+      - JWT_EXPIRATION=86400000
+      - JWT_HEADER=Authorization
+      - JWT_PREFIX=Bearer 
+    restart: on-failure
+    networks:
+      - ecotrack-network
+    volumes:
+      - app-data:/app/data
+
+  oracledb:
+    image: gvenzl/oracle-xe:21-slim
+    container_name: ecotrack-oracle
+    ports:
+      - "1521:1521"
+    environment:
+      - ORACLE_PASSWORD=oracle
+      - APP_USER=verdicomply
+      - APP_USER_PASSWORD=verdicomply
+      - ORACLE_DATABASE=XEPDB1
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+    restart: on-failure
+    networks:
+      - ecotrack-network
+
+networks:
+  ecotrack-network:
+    driver: bridge
+
+volumes:
+  app-data:
+  oracle-data:
