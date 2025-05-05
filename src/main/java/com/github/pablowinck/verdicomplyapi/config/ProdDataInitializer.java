@@ -2,7 +2,7 @@ package com.github.pablowinck.verdicomplyapi.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
+// import org.springframework.context.annotation.Profile; // Removido pois não é mais utilizado
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
  * Esta classe garante que dados essenciais (como usuário admin) estão disponíveis
  */
 @Configuration
-@Profile("prod")
+// @Profile("prod") // Removido para permitir inicialização em qualquer perfil
 @Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ProdDataInitializer {
@@ -66,7 +66,7 @@ public class ProdDataInitializer {
                 System.out.println("Criando usuário admin...");
                 adminUser = new Usuario();
                 adminUser.setUsername("admin");
-                adminUser.setPassword(passwordEncoder.encode("admin"));
+                adminUser.setPassword(passwordEncoder.encode("admin123"));
                 adminUser.setRole("ADMIN");
                 usuarioRepository.save(adminUser);
                 System.out.println("Usuário admin criado com sucesso!");
@@ -80,7 +80,7 @@ public class ProdDataInitializer {
             if (gestorUser == null) {
                 gestorUser = new Usuario();
                 gestorUser.setUsername("gestor");
-                gestorUser.setPassword(passwordEncoder.encode("gestor"));
+                gestorUser.setPassword(passwordEncoder.encode("gestor123"));
                 gestorUser.setRole("GESTOR");
                 usuarioRepository.save(gestorUser);
             }
@@ -91,7 +91,7 @@ public class ProdDataInitializer {
             if (auditorUser == null) {
                 auditorUser = new Usuario();
                 auditorUser.setUsername("auditor");
-                auditorUser.setPassword(passwordEncoder.encode("auditor"));
+                auditorUser.setPassword(passwordEncoder.encode("auditor123"));
                 auditorUser.setRole("AUDITOR");
                 usuarioRepository.save(auditorUser);
             }
