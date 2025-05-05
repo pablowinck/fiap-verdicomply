@@ -15,6 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.context.annotation.Import;
+
+import com.github.pablowinck.verdicomplyapi.config.IntegrationTestConfig;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("integracao")
+@Import(IntegrationTestConfig.class)
 public class RegistroControllerIT {
 
     @LocalServerPort

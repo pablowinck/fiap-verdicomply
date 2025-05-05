@@ -10,7 +10,9 @@ import org.springframework.core.Ordered;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pablowinck.verdicomplyapi.model.Departamento;
 import com.github.pablowinck.verdicomplyapi.model.Usuario;
+import com.github.pablowinck.verdicomplyapi.repository.DepartamentoRepository;
 import com.github.pablowinck.verdicomplyapi.repository.UsuarioRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Inicializador de dados para testes de integracao
  * Esta classe garante que os dados de teste estarão disponíveis para os testes de integração
- * Obs: A criação das tabelas é responsabilidade do Flyway
+ * A criação das tabelas é responsabilidade do Hibernate (ddl-auto=create-drop)
  */
 @Configuration
 @Profile("integracao")
@@ -30,6 +32,9 @@ public class TestDataInitializer {
     private UsuarioRepository usuarioRepository;
     
     @Autowired
+    private DepartamentoRepository departamentoRepository;
+    
+    @Autowired
     private PasswordEncoder passwordEncoder;
     
     /**
@@ -38,61 +43,84 @@ public class TestDataInitializer {
     @EventListener(ContextRefreshedEvent.class)
     @Transactional
     public void onApplicationEvent() {
-        log.info("Verificando necessidade de dados adicionais para testes");
+        log.info("Inicializando dados de teste para ambiente de integração");
         try {
-            // Verificar se já existem dados no banco (via data.sql)
-            if (usuarioRepository.findByUsername("admin").isPresent()) {
-                log.info("Usuários já existem no banco de dados (via data.sql). Nada a fazer.");
-            } else {
-                log.info("Dados não encontrados. Inserindo dados de teste manualmente.");
-                initUsers();
-            }
+            // Sempre inicializar os dados de teste para evitar problemas de dependência
+            initUsers();
+            initDepartamentos();
+            log.info("Dados de teste inicializados com sucesso");
         } catch (Exception e) {
-            log.error("Erro ao verificar/inicializar dados: {}", e.getMessage(), e);
+            log.error("Erro ao inicializar dados de teste: {}", e.getMessage(), e);
         }
     }
     
     /**
-     * Inicializa usuários para testes apenas se necessário
+     * Inicializa usuários para testes
      */
     @Transactional
     public void initUsers() {
         try {
-            log.info("Criando usuários de teste adicionais");
+            log.info("Criando usuários de teste");
             
-            // Admin (caso não exista)
-            if (!usuarioRepository.findByUsername("admin").isPresent()) {
-                Usuario admin = new Usuario();
-                admin.setUsername("admin");
-                admin.setPassword(passwordEncoder.encode("admin"));
-                admin.setRole("ADMIN");
-                usuarioRepository.save(admin);
-                log.info("Usuário 'admin' criado com sucesso");
-            }
+            // Admin 
+            createUserIfNotExists("admin", "admin", "ADMIN");
             
-            // Gestor (caso não exista)
-            if (!usuarioRepository.findByUsername("gestor").isPresent()) {
-                Usuario gestor = new Usuario();
-                gestor.setUsername("gestor");
-                gestor.setPassword(passwordEncoder.encode("gestor"));
-                gestor.setRole("GESTOR");
-                usuarioRepository.save(gestor);
-                log.info("Usuário 'gestor' criado com sucesso");
-            }
+            // Gestor 
+            createUserIfNotExists("gestor", "gestor", "GESTOR");
             
-            // Auditor (caso não exista)
-            if (!usuarioRepository.findByUsername("auditor").isPresent()) {
-                Usuario auditor = new Usuario();
-                auditor.setUsername("auditor");
-                auditor.setPassword(passwordEncoder.encode("auditor"));
-                auditor.setRole("AUDITOR");
-                usuarioRepository.save(auditor);
-                log.info("Usuário 'auditor' criado com sucesso");
-            }
+            // Auditor 
+            createUserIfNotExists("auditor", "auditor", "AUDITOR");
             
-            log.info("Verificação/criação de usuários finalizada");
+            log.info("Usuários de teste criados com sucesso");
         } catch (Exception e) {
             log.error("Erro ao inicializar usuários: {}", e.getMessage(), e);
+            throw e; // Propagar erro para detectar falhas
         }
+    }
+    
+    /**
+     * Método auxiliar para criar usuário se não existir
+     */
+    private Usuario createUserIfNotExists(String username, String password, String role) {
+        return usuarioRepository.findByUsername(username)
+                .orElseGet(() -> {
+                    Usuario user = new Usuario();
+                    user.setUsername(username);
+                    user.setPassword(passwordEncoder.encode(password));
+                    user.setRole(role);
+                    return usuarioRepository.save(user);
+                });
+    }
+    
+    /**
+     * Inicializa departamentos para testes
+     */
+    @Transactional
+    public void initDepartamentos() {
+        try {
+            log.info("Criando departamentos de teste");
+            
+            // Departamentos para testes
+            createDepartamentoIfNotExists("Manufatura_Integracao");
+            createDepartamentoIfNotExists("Logística_Integracao");
+            createDepartamentoIfNotExists("Operações_Integracao");
+            
+            log.info("Departamentos de teste criados com sucesso");
+        } catch (Exception e) {
+            log.error("Erro ao inicializar departamentos: {}", e.getMessage(), e);
+            throw e; // Propagar erro para detectar falhas
+        }
+    }
+    
+    /**
+     * Método auxiliar para criar departamento se não existir
+     */
+    private Departamento createDepartamentoIfNotExists(String nome) {
+        return departamentoRepository.findByNomeDepartamento(nome)
+                .orElseGet(() -> {
+                    Departamento departamento = new Departamento();
+                    departamento.setNomeDepartamento(nome);
+                    return departamentoRepository.save(departamento);
+                });
     }
 }

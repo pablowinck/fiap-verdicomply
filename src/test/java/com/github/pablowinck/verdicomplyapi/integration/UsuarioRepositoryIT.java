@@ -10,8 +10,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
+
+import com.github.pablowinck.verdicomplyapi.config.IntegrationTestConfig;
 
 
 import com.github.pablowinck.verdicomplyapi.model.Usuario;
@@ -23,6 +26,7 @@ import com.github.pablowinck.verdicomplyapi.repository.UsuarioRepository;
  */
 @SpringBootTest
 @ActiveProfiles("integracao")
+@Import(IntegrationTestConfig.class)
 public class UsuarioRepositoryIT {
 
     @Autowired

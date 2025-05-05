@@ -1,6 +1,7 @@
 package com.github.pablowinck.verdicomplyapi.integration;
 
 
+import com.github.pablowinck.verdicomplyapi.config.IntegrationTestConfig;
 import com.github.pablowinck.verdicomplyapi.dto.LoginDTO;
 import com.github.pablowinck.verdicomplyapi.dto.RegistroDTO;
 import org.junit.jupiter.api.DisplayName;
@@ -21,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.context.annotation.Import;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,11 +34,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Testes de integração para o fluxo completo de autenticação
- * Executado com o perfil "test" e sem mocks
+ * Executado com o perfil "integracao" e sem mocks
  */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("integracao")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Import(IntegrationTestConfig.class)
 public class FluxoAutenticacaoIT {
 
     @LocalServerPort
