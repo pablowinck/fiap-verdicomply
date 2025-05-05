@@ -22,7 +22,7 @@
     },
     {
       "key": "admin_password",
-      "value": "admin",
+      "value": "admin123",
       "type": "secret",
       "enabled": true
     },
@@ -34,7 +34,7 @@
     },
     {
       "key": "auditor_password",
-      "value": "auditor",
+      "value": "auditor123",
       "type": "secret",
       "enabled": true
     },
@@ -46,7 +46,7 @@
     },
     {
       "key": "gestor_password",
-      "value": "gestor",
+      "value": "gestor123",
       "type": "secret",
       "enabled": true
     }
