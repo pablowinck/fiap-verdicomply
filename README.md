@@ -1,8 +1,8 @@
-# EcoTrack Auditor API
+# VerdiComply API
 
 ## Sobre o Projeto
 
-EcoTrack Auditor é uma aplicação RESTful para gerenciamento de auditorias ambientais, permitindo o acompanhamento de conformidades com normas ambientais e o gerenciamento de pendências.
+VerdiComply é uma aplicação RESTful para gerenciamento de auditorias ambientais, permitindo o acompanhamento de conformidades com normas ambientais e o gerenciamento de pendências.
 
 ## Tecnologias Utilizadas
 
@@ -10,9 +10,9 @@ EcoTrack Auditor é uma aplicação RESTful para gerenciamento de auditorias amb
 - Spring Boot 3.4.5
 - Spring Security (Autenticação JWT + Controle de Acesso Baseado em Papéis)
 - Spring Data JPA
-- Oracle 19c
+- Oracle Database (servidor FIAP)
 - Flyway para migrações de banco de dados
-- Docker e Docker Compose para contêinerização
+- Docker e Docker Compose para conteinerização
 - Swagger/OpenAPI para documentação da API
 
 ## Pré-requisitos
@@ -26,14 +26,22 @@ EcoTrack Auditor é uma aplicação RESTful para gerenciamento de auditorias amb
 ### Usando Docker Compose
 
 1. Clone o repositório:
+
    ```bash
-   git clone https://github.com/seu-usuario/verdicomplyapi.git
+   git clone https://github.com/pablowinck/verdicomplyapi.git
    cd verdicomplyapi
    ```
 
 2. Execute a aplicação utilizando Docker Compose:
+
    ```bash
-   docker-compose up -d
+   docker compose up -d
+   ```
+
+   Ou, para limpar o esquema do banco antes da execução:
+
+   ```bash
+   ./deploy-with-clean.sh
    ```
 
 3. Acesse a documentação da API:
@@ -41,9 +49,46 @@ EcoTrack Auditor é uma aplicação RESTful para gerenciamento de auditorias amb
    http://localhost:8080/swagger-ui/index.html
    ```
 
+### Informações sobre Banco de Dados
+
+A aplicação utiliza conexão direta com o servidor Oracle da FIAP com as seguintes configurações:
+
+- **URL**: `jdbc:oracle:thin:@oracle.fiap.com.br:1521:orcl`
+- **Usuário**: `RM557024`
+- **Senha**: `240200`
+
+> **Nota**: Estas credenciais são exclusivas para o ambiente de demonstração e desenvolvimento. Em ambiente de produção, use váriaveis de ambiente ou serviços de gerenciamento de configuração seguros.
+
+### Utilitário de Gerenciamento Oracle
+
+A aplicação fornece um utilitário Java independente para gerenciar o banco de dados Oracle:
+
+```bash
+# Visualizar opções disponíveis
+./oracle-util.sh help
+
+# Listar tabelas e sequências existentes
+./oracle-util.sh list
+
+# Limpar todo o esquema (remove tabelas e sequências)
+./oracle-util.sh clean
+
+# Executar SQL personalizado
+./oracle-util.sh execute "SELECT * FROM USUARIOS"
+```
+
+### Configuração do Flyway
+
+O projeto utiliza Flyway para gerenciar migrações de banco de dados. As migrações estão configuradas para:
+
+- Realizar baseline automático quando necessário
+- Executar scripts em ordem correta
+- Funcionar mesmo em ambientes Oracle com restrições de permissões
+
 ### Desenvolvimento Local
 
 1. Clone o repositório:
+
    ```bash
    git clone https://github.com/seu-usuario/verdicomplyapi.git
    cd verdicomplyapi
@@ -59,11 +104,13 @@ EcoTrack Auditor é uma aplicação RESTful para gerenciamento de auditorias amb
 A aplicação inclui três usuários pré-configurados para testes:
 
 - **Auditor**:
+
   - Usuário: `auditor`
   - Senha: `auditor123`
   - Papel: `ROLE_AUDITOR`
 
 - **Gestor**:
+
   - Usuário: `gestor`
   - Senha: `gestor123`
   - Papéis: `ROLE_GESTOR`, `ROLE_AUDITOR`
@@ -78,6 +125,7 @@ A aplicação inclui três usuários pré-configurados para testes:
 A API é dividida em quatro principais grupos de endpoints:
 
 1. **Auditorias**: `/api/auditorias/**`
+
    - Listar todas as auditorias
    - Buscar auditoria por ID
    - Criar nova auditoria
@@ -87,6 +135,7 @@ A API é dividida em quatro principais grupos de endpoints:
    - Buscar por departamento
 
 2. **Conformidades**: `/api/conformidades/**`
+
    - Listar todas as conformidades
    - Buscar conformidade por ID
    - Criar nova conformidade
@@ -97,6 +146,7 @@ A API é dividida em quatro principais grupos de endpoints:
    - Buscar por norma
 
 3. **Pendências**: `/api/pendencias/**`
+
    - Listar todas as pendências
    - Buscar pendência por ID
    - Criar nova pendência
@@ -123,11 +173,13 @@ Todos os endpoints estão protegidos e requerem autenticação, com exceção de
 A API utiliza JWT (JSON Web Token) para autenticação segura de usuários.
 
 1. **Obter Token**:
+
    - Endpoint: `POST /api/public/auth/login`
    - Corpo da requisição: `{"username": "seu-usuario", "password": "sua-senha"}`
    - Resposta: `{"tipo": "Bearer", "token": "seu-token-jwt", "username": "seu-usuario", "roles": ["ROLE_X", "ROLE_Y"]}`
 
 2. **Autenticar Requisições**:
+
    - Adicione o header `Authorization: Bearer seu-token-jwt` em todas as requisições para endpoints protegidos
 
 3. **Tempo de Expiração**:
