@@ -1,0 +1,4 @@
+-- Registrar o serviço XEPDB1 para conexões externas
+ALTER SESSION SET CONTAINER=XEPDB1;
+ALTER SYSTEM REGISTER;
+EXIT;

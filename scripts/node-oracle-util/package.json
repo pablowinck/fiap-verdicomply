@@ -1,0 +1,16 @@
+{
+  "name": "oracle-util",
+  "version": "1.0.0",
+  "description": "Utilitário para gerenciar banco Oracle da FIAP",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "clean": "node clean-schema.js"
+  },
+  "dependencies": {
+    "oracledb": "^5.5.0",
+    "dotenv": "^16.3.1",
+    "chalk": "^4.1.2",
+    "yargs": "^17.7.1"
+  }
+}
