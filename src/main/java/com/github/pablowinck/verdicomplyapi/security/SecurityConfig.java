@@ -3,8 +3,8 @@ package com.github.pablowinck.verdicomplyapi.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -61,18 +61,39 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/public/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/api/public/**").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
             )
             .exceptionHandling(ex -> ex
                 .accessDeniedHandler(accessDeniedHandler())
             )
-            .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-            .httpBasic(Customizer.withDefaults()); // Manter autenticação básica como fallback
+            .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        
         return http.build();
+    }
+    
+    @Bean
+    public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
+        org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
+        configuration.setAllowedOriginPatterns(java.util.Collections.singletonList("*"));
+        configuration.setAllowedMethods(java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(java.util.Arrays.asList("*"));
+        configuration.setExposedHeaders(java.util.Arrays.asList("Authorization"));
+        configuration.setAllowCredentials(true);
+        
+        org.springframework.web.cors.UrlBasedCorsConfigurationSource source = 
+            new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/v3/api-docs/**", configuration);
+        source.registerCorsConfiguration("/swagger-ui/**", configuration);
+        
+        return source;
     }
     
     @Bean

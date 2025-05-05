@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   app:
@@ -26,6 +26,4 @@ services:
       - JWT_SECRET=3778214125442A472D4B614E645267556B58703273357638792F423F4528472B
       - JWT_EXPIRATION=86400000
       - JWT_HEADER=Authorization
-      - JWT_PREFIX=Bearer 
-      
-# Removido o serviço oracle-client pois estamos usando conexão direta com o Oracle da FIAP
+      - JWT_PREFIX=Bearer

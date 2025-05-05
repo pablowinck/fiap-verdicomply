@@ -13,7 +13,6 @@ VerdiComply é uma aplicação RESTful para gerenciamento de auditorias ambienta
 - Oracle Database (servidor FIAP)
 - Flyway para migrações de banco de dados
 - Docker e Docker Compose para conteinerização
-- Swagger/OpenAPI para documentação da API
 
 ## Pré-requisitos
 
@@ -44,10 +43,7 @@ VerdiComply é uma aplicação RESTful para gerenciamento de auditorias ambienta
    ./deploy-with-clean.sh
    ```
 
-3. Acesse a documentação da API:
-   ```
-   http://localhost:8080/swagger-ui/index.html
-   ```
+
 
 ### Informações sobre Banco de Dados
 
@@ -166,7 +162,7 @@ A API é dividida em quatro principais grupos de endpoints:
 
 ## Segurança
 
-Todos os endpoints estão protegidos e requerem autenticação, com exceção de `/api/public/**`, `/swagger-ui/**` e `/v3/api-docs/**`.
+Todos os endpoints estão protegidos e requerem autenticação, com exceção de `/api/public/**`.
 
 ### Autenticação JWT
 
