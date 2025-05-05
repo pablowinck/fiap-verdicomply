@@ -1,0 +1,353 @@
+[
+  {
+    "name": "Listar Todas Auditorias",
+    "request": {
+      "method": "GET",
+      "header": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ],
+      "url": {
+        "raw": "{{host}}/api/auditorias",
+        "host": ["{{host}}"],
+        "path": ["api", "auditorias"]
+      },
+      "description": "Listar todas as auditorias (requer role ADMIN)."
+    },
+    "response": [],
+    "event": [
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test(\"Status code é 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});",
+            "",
+            "pm.test(\"Resposta é um array de auditorias\", function () {",
+            "    var responseJson = pm.response.json();",
+            "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+            "    ",
+            "    if (responseJson.length > 0) {",
+            "        pm.environment.set('last_auditoria_id', responseJson[0].id);",
+            "    }",
+            "});"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "Buscar Auditoria por ID",
+    "request": {
+      "method": "GET",
+      "header": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ],
+      "url": {
+        "raw": "{{host}}/api/auditorias/{{last_auditoria_id}}",
+        "host": ["{{host}}"],
+        "path": ["api", "auditorias", "{{last_auditoria_id}}"]
+      },
+      "description": "Buscar uma auditoria específica pelo ID."
+    },
+    "response": [],
+    "event": [
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test(\"Status code é 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});",
+            "",
+            "pm.test(\"Resposta contém dados da auditoria\", function () {",
+            "    var responseJson = pm.response.json();",
+            "    pm.expect(responseJson).to.have.property('id');",
+            "    pm.expect(responseJson).to.have.property('descricao');",
+            "    pm.expect(responseJson).to.have.property('status');",
+            "    pm.expect(responseJson).to.have.property('dataAuditoria');",
+            "});"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "Buscar Auditoria - ID Inválido",
+    "request": {
+      "method": "GET",
+      "header": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ],
+      "url": {
+        "raw": "{{host}}/api/auditorias/99999",
+        "host": ["{{host}}"],
+        "path": ["api", "auditorias", "99999"]
+      },
+      "description": "Buscar uma auditoria com ID inexistente."
+    },
+    "response": [],
+    "event": [
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test(\"Status code é 404 ou 400\", function () {",
+            "    pm.expect(pm.response.code).to.be.oneOf([404, 400]);",
+            "});"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "Criar Auditoria",
+    "request": {
+      "method": "POST",
+      "header": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"descricao\": \"Auditoria Teste {{$timestamp}}\",\n    \"status\": \"PROGRAMADA\",\n    \"dataAuditoria\": \"2025-06-10\",\n    \"departamentoId\": 1,\n    \"observacoes\": \"Criado via Postman para testes\"\n}"
+      },
+      "url": {
+        "raw": "{{host}}/api/auditorias",
+        "host": ["{{host}}"],
+        "path": ["api", "auditorias"]
+      },
+      "description": "Criar uma nova auditoria."
+    },
+    "response": [],
+    "event": [
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test(\"Status code é 201\", function () {",
+            "    pm.response.to.have.status(201);",
+            "});",
+            "",
+            "pm.test(\"Resposta contém dados da auditoria criada\", function () {",
+            "    var responseJson = pm.response.json();",
+            "    pm.expect(responseJson).to.have.property('id');",
+            "    pm.environment.set('last_auditoria_id', responseJson.id);",
+            "});"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "Criar Auditoria - Dados Inválidos",
+    "request": {
+      "method": "POST",
+      "header": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"descricao\": \"\",\n    \"status\": \"STATUS_INEXISTENTE\",\n    \"dataAuditoria\": \"data-invalida\",\n    \"departamentoId\": null\n}"
+      },
+      "url": {
+        "raw": "{{host}}/api/auditorias",
+        "host": ["{{host}}"],
+        "path": ["api", "auditorias"]
+      },
+      "description": "Tentar criar uma auditoria com dados inválidos."
+    },
+    "response": [],
+    "event": [
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test(\"Status code é 400\", function () {",
+            "    pm.response.to.have.status(400);",
+            "});"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "Atualizar Auditoria",
+    "request": {
+      "method": "PUT",
+      "header": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"descricao\": \"Auditoria Atualizada {{$timestamp}}\",\n    \"status\": \"EM_ANDAMENTO\",\n    \"dataAuditoria\": \"2025-06-15\",\n    \"departamentoId\": 1,\n    \"observacoes\": \"Atualizado via Postman para testes\"\n}"
+      },
+      "url": {
+        "raw": "{{host}}/api/auditorias/{{last_auditoria_id}}",
+        "host": ["{{host}}"],
+        "path": ["api", "auditorias", "{{last_auditoria_id}}"]
+      },
+      "description": "Atualizar uma auditoria existente."
+    },
+    "response": [],
+    "event": [
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test(\"Status code é 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});",
+            "",
+            "pm.test(\"Resposta contém dados atualizados\", function () {",
+            "    var responseJson = pm.response.json();",
+            "    pm.expect(responseJson).to.have.property('status');",
+            "    pm.expect(responseJson.status).to.equal('EM_ANDAMENTO');",
+            "});"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "Excluir Auditoria",
+    "request": {
+      "method": "DELETE",
+      "header": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ],
+      "url": {
+        "raw": "{{host}}/api/auditorias/{{last_auditoria_id}}",
+        "host": ["{{host}}"],
+        "path": ["api", "auditorias", "{{last_auditoria_id}}"]
+      },
+      "description": "Excluir uma auditoria existente (requer role ADMIN)."
+    },
+    "response": [],
+    "event": [
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test(\"Status code é 204\", function () {",
+            "    pm.response.to.have.status(204);",
+            "});"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "Buscar Auditorias por Status",
+    "request": {
+      "method": "GET",
+      "header": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ],
+      "url": {
+        "raw": "{{host}}/api/auditorias/status/PROGRAMADA",
+        "host": ["{{host}}"],
+        "path": ["api", "auditorias", "status", "PROGRAMADA"]
+      },
+      "description": "Buscar auditorias por status."
+    },
+    "response": [],
+    "event": [
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test(\"Status code é 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});",
+            "",
+            "pm.test(\"Resposta é um array de auditorias\", function () {",
+            "    var responseJson = pm.response.json();",
+            "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+            "});"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "Buscar Auditorias por Departamento",
+    "request": {
+      "method": "GET",
+      "header": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ],
+      "url": {
+        "raw": "{{host}}/api/auditorias/departamento/1",
+        "host": ["{{host}}"],
+        "path": ["api", "auditorias", "departamento", "1"]
+      },
+      "description": "Buscar auditorias por departamento."
+    },
+    "response": [],
+    "event": [
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test(\"Status code é 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});",
+            "",
+            "pm.test(\"Resposta é um array de auditorias\", function () {",
+            "    var responseJson = pm.response.json();",
+            "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+            "});"
+          ]
+        }
+      }
+    ]
+  }
+]

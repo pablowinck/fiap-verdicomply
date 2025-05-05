@@ -194,3 +194,51 @@ A API utiliza JWT (JSON Web Token) para autenticação segura de usuários.
 ### Exemplos de Chamadas
 
 Exemplos detalhados de como fazer chamadas autenticadas para a API estão disponíveis no arquivo `exemplos-curl.md`.
+
+## Coleção Postman
+
+Para facilitar o teste e a documentação da API, disponibilizamos uma coleção completa do Postman com todos os endpoints disponíveis.
+
+### Como Utilizar
+
+1. Importe a coleção do diretório `postman/verdicomply-api-collection-complete.json` para o Postman
+2. Importe as variáveis de ambiente do diretório `postman/verdicomply-api-environment.json`
+3. Utilize o endpoint "Autenticar" na pasta "Autenticação" para obter o token JWT
+4. O token será automaticamente configurado para todas as demais requisições da coleção
+
+### Recursos Incluídos
+
+- **Autenticação**: Login e registro de usuários
+- **Auditorias**: Gerenciamento completo de auditorias ambientais
+- **Normas Ambientais**: Consulta e gerenciamento de normas ambientais
+- **Conformidades**: Registro e acompanhamento de conformidades
+- **Pendências**: Gerenciamento de ações pendentes
+- **Logs**: Registros de mudanças em conformidades
+
+### Preparando o Ambiente de Teste
+
+Antes de executar os testes, prepare o ambiente de teste com dados iniciais:
+
+```bash
+# Inicie a API primeiro
+./mvnw spring-boot:run
+
+# Em outro terminal, prepare o ambiente de teste
+./postman/preparar_ambiente_teste.sh
+```
+
+Este script cria recursos de teste (norma ambiental, auditoria, conformidade, pendência e log) e atualiza o arquivo de variáveis de ambiente do Postman com os IDs gerados.
+
+### Execução Automatizada
+
+A coleção inclui scripts de pré-requisição e testes para facilitar a execução automatizada:
+
+```bash
+# Executar todos os testes via Newman (CLI do Postman)
+./postman/run_tests.sh
+
+# Executar apenas endpoints específicos
+./postman/run_auth_tests.sh
+```
+
+Para mais detalhes sobre a decisão de arquitetura relacionada à coleção Postman, consulte o documento [ADR_002_Postman_Collection.md](docs/ADR_002_Postman_Collection.md).

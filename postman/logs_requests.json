@@ -1,0 +1,307 @@
+[
+  {
+    "name": "Listar Todos os Logs",
+    "request": {
+      "method": "GET",
+      "header": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ],
+      "url": {
+        "raw": "{{host}}/api/logs",
+        "host": ["{{host}}"],
+        "path": ["api", "logs"]
+      },
+      "description": "Listar todos os logs de conformidade (requer roles GESTOR ou ADMIN)."
+    },
+    "response": [],
+    "event": [
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test(\"Status code é 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});",
+            "",
+            "pm.test(\"Resposta é um array de logs\", function () {",
+            "    var responseJson = pm.response.json();",
+            "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+            "    ",
+            "    if (responseJson.length > 0) {",
+            "        pm.environment.set('last_log_id', responseJson[0].id);",
+            "    }",
+            "});"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "Buscar Log por ID",
+    "request": {
+      "method": "GET",
+      "header": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ],
+      "url": {
+        "raw": "{{host}}/api/logs/{{last_log_id}}",
+        "host": ["{{host}}"],
+        "path": ["api", "logs", "{{last_log_id}}"]
+      },
+      "description": "Buscar um log específico pelo ID."
+    },
+    "response": [],
+    "event": [
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test(\"Status code é 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});",
+            "",
+            "pm.test(\"Resposta contém dados do log\", function () {",
+            "    var responseJson = pm.response.json();",
+            "    pm.expect(responseJson).to.have.property('id');",
+            "    pm.expect(responseJson).to.have.property('acao');",
+            "    pm.expect(responseJson).to.have.property('descricao');",
+            "    pm.expect(responseJson).to.have.property('dataHora');",
+            "});"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "Buscar Log - ID Inválido",
+    "request": {
+      "method": "GET",
+      "header": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ],
+      "url": {
+        "raw": "{{host}}/api/logs/99999",
+        "host": ["{{host}}"],
+        "path": ["api", "logs", "99999"]
+      },
+      "description": "Buscar um log com ID inexistente."
+    },
+    "response": [],
+    "event": [
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test(\"Status code é 404 ou 400\", function () {",
+            "    pm.expect(pm.response.code).to.be.oneOf([404, 400]);",
+            "});"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "Criar Log",
+    "request": {
+      "method": "POST",
+      "header": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"descricao\": \"Log Teste {{$timestamp}}\",\n    \"acao\": \"CRIACAO\",\n    \"conformidadeId\": \"{{last_conformidade_id}}\"\n}"
+      },
+      "url": {
+        "raw": "{{host}}/api/logs",
+        "host": ["{{host}}"],
+        "path": ["api", "logs"]
+      },
+      "description": "Criar um novo log de conformidade."
+    },
+    "response": [],
+    "event": [
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test(\"Status code é 201\", function () {",
+            "    pm.response.to.have.status(201);",
+            "});",
+            "",
+            "pm.test(\"Resposta contém dados do log criado\", function () {",
+            "    var responseJson = pm.response.json();",
+            "    pm.expect(responseJson).to.have.property('id');",
+            "    pm.environment.set('last_log_id', responseJson.id);",
+            "});"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "Criar Log - Dados Inválidos",
+    "request": {
+      "method": "POST",
+      "header": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"descricao\": \"\",\n    \"acao\": \"ACAO_INEXISTENTE\",\n    \"conformidadeId\": null\n}"
+      },
+      "url": {
+        "raw": "{{host}}/api/logs",
+        "host": ["{{host}}"],
+        "path": ["api", "logs"]
+      },
+      "description": "Tentar criar um log com dados inválidos."
+    },
+    "response": [],
+    "event": [
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test(\"Status code é 400\", function () {",
+            "    pm.response.to.have.status(400);",
+            "});"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "Excluir Log",
+    "request": {
+      "method": "DELETE",
+      "header": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ],
+      "url": {
+        "raw": "{{host}}/api/logs/{{last_log_id}}",
+        "host": ["{{host}}"],
+        "path": ["api", "logs", "{{last_log_id}}"]
+      },
+      "description": "Excluir um log existente (requer role ADMIN)."
+    },
+    "response": [],
+    "event": [
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test(\"Status code é 204\", function () {",
+            "    pm.response.to.have.status(204);",
+            "});"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "Buscar Logs por Conformidade",
+    "request": {
+      "method": "GET",
+      "header": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ],
+      "url": {
+        "raw": "{{host}}/api/logs/conformidade/{{last_conformidade_id}}",
+        "host": ["{{host}}"],
+        "path": ["api", "logs", "conformidade", "{{last_conformidade_id}}"]
+      },
+      "description": "Buscar logs por conformidade."
+    },
+    "response": [],
+    "event": [
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test(\"Status code é 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});",
+            "",
+            "pm.test(\"Resposta é um array de logs\", function () {",
+            "    var responseJson = pm.response.json();",
+            "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+            "});"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "Buscar Logs por Ação",
+    "request": {
+      "method": "GET",
+      "header": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ],
+      "url": {
+        "raw": "{{host}}/api/logs/acao/CRIACAO",
+        "host": ["{{host}}"],
+        "path": ["api", "logs", "acao", "CRIACAO"]
+      },
+      "description": "Buscar logs por tipo de ação."
+    },
+    "response": [],
+    "event": [
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test(\"Status code é 200\", function () {",
+            "    pm.response.to.have.status(200);",
+            "});",
+            "",
+            "pm.test(\"Resposta é um array de logs\", function () {",
+            "    var responseJson = pm.response.json();",
+            "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+            "});"
+          ]
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,2022 @@
+{
+  "info": {
+    "name": "VerdiComply API",
+    "description": "Collection para testar todos os endpoints da API VerdiComply",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "1234567"
+  },
+  "item": [
+    {
+      "name": "Autenticação e Registro",
+      "description": "Endpoints para autenticação e registro de usuários",
+      "item": [
+        {
+          "name": "Login - Sucesso (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"{{admin_username}}\",\n    \"password\": \"{{admin_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{host}}/api/public/auth/login",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "public",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Login com credenciais de administrador válidas."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta contém token JWT\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('token');",
+                  "    pm.expect(responseJson.token).to.not.be.empty;",
+                  "    pm.environment.set('token', responseJson.token);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login - Falha (Credenciais Inválidas)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"usuario_inexistente\",\n    \"password\": \"senha_incorreta\"\n}"
+            },
+            "url": {
+              "raw": "{{host}}/api/public/auth/login",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "public",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Login com credenciais inválidas."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 401\", function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta indica erro de autenticação\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('tipo');",
+                  "    pm.expect(responseJson.tipo).to.equal('erro');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login - Sucesso (Auditor)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"{{auditor_username}}\",\n    \"password\": \"{{auditor_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{host}}/api/public/auth/login",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "public",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Login com credenciais de auditor válidas."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta contém token JWT\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('token');",
+                  "    pm.expect(responseJson.token).to.not.be.empty;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Registro - Sucesso",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"novo_usuario_{{$timestamp}}\",\n    \"password\": \"senha123\",\n    \"role\": \"AUDITOR\"\n}"
+            },
+            "url": {
+              "raw": "{{host}}/api/public/registro",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "public",
+                "registro"
+              ]
+            },
+            "description": "Registrar um novo usuário."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta confirma registro de usuário\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('username');",
+                  "    pm.expect(responseJson).to.have.property('role');",
+                  "    pm.expect(responseJson).to.have.property('mensagem');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Registro - Falha (Username Existente)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"{{admin_username}}\",\n    \"password\": \"senha123\",\n    \"role\": \"ADMIN\"\n}"
+            },
+            "url": {
+              "raw": "{{host}}/api/public/registro",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "public",
+                "registro"
+              ]
+            },
+            "description": "Tentar registrar um usuário com username já existente."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 400 ou 500\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 500]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "description": "Endpoint para verificar a saúde da API",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/api/public/health",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "public",
+                "health"
+              ]
+            },
+            "description": "Verificar status de saúde da API."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta contém status UP\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('status');",
+                  "    pm.expect(responseJson.status).to.equal('UP');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Auditorias",
+      "description": "Endpoints para gerenciamento de auditorias",
+      "item": [
+        {
+          "name": "Listar Todas Auditorias",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/auditorias",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auditorias"
+              ]
+            },
+            "description": "Listar todas as auditorias (requer role ADMIN)."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta é um array de auditorias\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+                  "    ",
+                  "    if (responseJson.length > 0) {",
+                  "        pm.environment.set('last_auditoria_id', responseJson[0].id);",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar Auditoria por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/auditorias/{{last_auditoria_id}}",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auditorias",
+                "{{last_auditoria_id}}"
+              ]
+            },
+            "description": "Buscar uma auditoria específica pelo ID."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta contém dados da auditoria\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('id');",
+                  "    pm.expect(responseJson).to.have.property('descricao');",
+                  "    pm.expect(responseJson).to.have.property('status');",
+                  "    pm.expect(responseJson).to.have.property('dataAuditoria');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar Auditoria - ID Inválido",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/auditorias/99999",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auditorias",
+                "99999"
+              ]
+            },
+            "description": "Buscar uma auditoria com ID inexistente."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 404 ou 400\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([404, 400]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar Auditoria",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"descricao\": \"Auditoria Teste {{$timestamp}}\",\n    \"statusAuditoria\": \"PROGRAMADA\",\n    \"dataAuditoria\": \"2025-05-05\",\n    \"departamentoId\": 1,\n    \"auditorResponsavel\": \"Auditor Teste\",\n    \"observacoes\": \"Criado via Postman para testes\"\n}"
+            },
+            "url": {
+              "raw": "{{host}}/api/auditorias",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auditorias"
+              ]
+            },
+            "description": "Criar uma nova auditoria."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta contém dados da auditoria criada\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('id');",
+                  "    pm.environment.set('last_auditoria_id', responseJson.id);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar Auditoria - Dados Inválidos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"descricao\": \"\",\n    \"status\": \"STATUS_INEXISTENTE\",\n    \"dataAuditoria\": \"data-invalida\",\n    \"departamentoId\": null\n}"
+            },
+            "url": {
+              "raw": "{{host}}/api/auditorias",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auditorias"
+              ]
+            },
+            "description": "Tentar criar uma auditoria com dados inválidos."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Atualizar Auditoria",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"descricao\": \"Auditoria Atualizada {{$timestamp}}\",\n    \"status\": \"EM_ANDAMENTO\",\n    \"dataAuditoria\": \"2025-06-15\",\n    \"departamentoId\": 1,\n    \"observacoes\": \"Atualizado via Postman para testes\"\n}"
+            },
+            "url": {
+              "raw": "{{host}}/api/auditorias/{{last_auditoria_id}}",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auditorias",
+                "{{last_auditoria_id}}"
+              ]
+            },
+            "description": "Atualizar uma auditoria existente."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta contém dados atualizados\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('status');",
+                  "    pm.expect(responseJson.status).to.equal('EM_ANDAMENTO');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Excluir Auditoria",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/auditorias/{{last_auditoria_id}}",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auditorias",
+                "{{last_auditoria_id}}"
+              ]
+            },
+            "description": "Excluir uma auditoria existente (requer role ADMIN)."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar Auditorias por Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/auditorias/status/PROGRAMADA",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auditorias",
+                "status",
+                "PROGRAMADA"
+              ]
+            },
+            "description": "Buscar auditorias por status."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta é um array de auditorias\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar Auditorias por Departamento",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/auditorias/departamento/1",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auditorias",
+                "departamento",
+                "1"
+              ]
+            },
+            "description": "Buscar auditorias por departamento."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta é um array de auditorias\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Conformidades",
+      "description": "Endpoints para gerenciamento de conformidades",
+      "item": [
+        {
+          "name": "Listar Todas Conformidades",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/conformidades",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "conformidades"
+              ]
+            },
+            "description": "Listar todas as conformidades."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta é um array de conformidades\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+                  "    ",
+                  "    if (responseJson.length > 0) {",
+                  "        pm.environment.set('last_conformidade_id', responseJson[0].id);",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar Conformidade por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/conformidades/{{last_conformidade_id}}",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "conformidades",
+                "{{last_conformidade_id}}"
+              ]
+            },
+            "description": "Buscar uma conformidade específica pelo ID."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta contém dados da conformidade\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('id');",
+                  "    pm.expect(responseJson).to.have.property('estaConforme');",
+                  "    pm.expect(responseJson).to.have.property('descricao');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar Conformidade - ID Inválido",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/conformidades/99999",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "conformidades",
+                "99999"
+              ]
+            },
+            "description": "Buscar uma conformidade com ID inexistente."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 404 ou 400\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([404, 400]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar Conformidade",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"descricao\": \"Conformidade Teste {{$timestamp}}\",\n    \"estaConforme\": \"S\",\n    \"observacoes\": \"Criado via Postman para testes\",\n    \"auditoriaId\": {{last_auditoria_id}},\n    \"normaAmbientalId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{host}}/api/conformidades",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "conformidades"
+              ]
+            },
+            "description": "Criar uma nova conformidade."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta contém dados da conformidade criada\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('id');",
+                  "    pm.environment.set('last_conformidade_id', responseJson.id);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar Conformidade - Dados Inválidos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"descricao\": \"\",\n    \"auditoriaId\": null,\n    \"normaAmbientalId\": null\n}"
+            },
+            "url": {
+              "raw": "{{host}}/api/conformidades",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "conformidades"
+              ]
+            },
+            "description": "Tentar criar uma conformidade com dados inválidos."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Atualizar Conformidade",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"descricao\": \"Conformidade Atualizada {{$timestamp}}\",\n    \"estaConforme\": false,\n    \"observacoes\": \"Atualizado via Postman para testes\",\n    \"auditoriaId\": \"{{last_auditoria_id}}\",\n    \"normaAmbientalId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{host}}/api/conformidades/{{last_conformidade_id}}",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "conformidades",
+                "{{last_conformidade_id}}"
+              ]
+            },
+            "description": "Atualizar uma conformidade existente."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta contém dados atualizados\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('estaConforme');",
+                  "    pm.expect(responseJson.estaConforme).to.equal(false);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Excluir Conformidade",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/conformidades/{{last_conformidade_id}}",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "conformidades",
+                "{{last_conformidade_id}}"
+              ]
+            },
+            "description": "Excluir uma conformidade existente (requer role ADMIN)."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar Conformidades por Auditoria",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/conformidades/auditoria/{{last_auditoria_id}}",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "conformidades",
+                "auditoria",
+                "{{last_auditoria_id}}"
+              ]
+            },
+            "description": "Buscar conformidades por auditoria."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta é um array de conformidades\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar Conformidades por Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/conformidades/status/true",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "conformidades",
+                "status",
+                "true"
+              ]
+            },
+            "description": "Buscar conformidades por status de conformidade."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta é um array de conformidades\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar Conformidades por Norma",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/conformidades/norma/1",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "conformidades",
+                "norma",
+                "1"
+              ]
+            },
+            "description": "Buscar conformidades por norma ambiental."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta é um array de conformidades\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Logs de Conformidade",
+      "description": "Endpoints para gerenciamento de logs de conformidade",
+      "item": [
+        {
+          "name": "Listar Todos os Logs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/logs",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "logs"
+              ]
+            },
+            "description": "Listar todos os logs de conformidade (requer roles GESTOR ou ADMIN)."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta é um array de logs\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+                  "    ",
+                  "    if (responseJson.length > 0) {",
+                  "        pm.environment.set('last_log_id', responseJson[0].id);",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar Log por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/logs/{{last_log_id}}",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "logs",
+                "{{last_log_id}}"
+              ]
+            },
+            "description": "Buscar um log específico pelo ID."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta contém dados do log\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('id');",
+                  "    pm.expect(responseJson).to.have.property('acao');",
+                  "    pm.expect(responseJson).to.have.property('descricao');",
+                  "    pm.expect(responseJson).to.have.property('dataHora');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar Log - ID Inválido",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/logs/99999",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "logs",
+                "99999"
+              ]
+            },
+            "description": "Buscar um log com ID inexistente."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 404 ou 400\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([404, 400]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar Log",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"conformidadeId\": {{last_conformidade_id}},\n    \"acao\": \"CRIACAO\",\n    \"dataHora\": \"2025-05-05T11:45:00\",\n    \"usuario\": \"admin\",\n    \"detalhes\": \"Log de teste criado via Postman {{$timestamp}}\"\n}"
+            },
+            "url": {
+              "raw": "{{host}}/api/logs",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "logs"
+              ]
+            },
+            "description": "Criar um novo log de conformidade."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta contém dados do log criado\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('id');",
+                  "    pm.environment.set('last_log_id', responseJson.id);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar Log - Dados Inválidos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"descricao\": \"\",\n    \"acao\": \"ACAO_INEXISTENTE\",\n    \"conformidadeId\": null\n}"
+            },
+            "url": {
+              "raw": "{{host}}/api/logs",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "logs"
+              ]
+            },
+            "description": "Tentar criar um log com dados inválidos."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Excluir Log",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/logs/{{last_log_id}}",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "logs",
+                "{{last_log_id}}"
+              ]
+            },
+            "description": "Excluir um log existente (requer role ADMIN)."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar Logs por Conformidade",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/logs/conformidade/{{last_conformidade_id}}",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "logs",
+                "conformidade",
+                "{{last_conformidade_id}}"
+              ]
+            },
+            "description": "Buscar logs por conformidade."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta é um array de logs\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar Logs por Ação",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/logs/acao/CRIACAO",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "logs",
+                "acao",
+                "CRIACAO"
+              ]
+            },
+            "description": "Buscar logs por tipo de ação."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta é um array de logs\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pendências",
+      "description": "Endpoints para gerenciamento de pendências",
+      "item": [
+        {
+          "name": "Listar Todas Pendências",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/pendencias",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias"
+              ]
+            },
+            "description": "Listar todas as pendências."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta é um array de pendências\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+                  "    ",
+                  "    if (responseJson.length > 0) {",
+                  "        pm.environment.set('last_pendencia_id', responseJson[0].id);",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar Pendência por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/pendencias/{{last_pendencia_id}}",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias",
+                "{{last_pendencia_id}}"
+              ]
+            },
+            "description": "Buscar uma pendência específica pelo ID."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta contém dados da pendência\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('id');",
+                  "    pm.expect(responseJson).to.have.property('descricao');",
+                  "    pm.expect(responseJson).to.have.property('resolvida');",
+                  "    pm.expect(responseJson).to.have.property('dataPrazo');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar Pendência - ID Inválido",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/pendencias/99999",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias",
+                "99999"
+              ]
+            },
+            "description": "Buscar uma pendência com ID inexistente."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 404 ou 400\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([404, 400]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar Pendência",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"descricao\": \"Pendência Teste {{$timestamp}}\",\n    \"resolvida\": \"N\",\n    \"prazoResolucao\": \"2025-07-10\",\n    \"conformidadeId\": {{last_conformidade_id}},\n    \"acaoCorretiva\": \"Ação corretiva a ser implementada\",\n    \"observacoes\": \"Pendência criada via teste Postman\"\n}"
+            },
+            "url": {
+              "raw": "{{host}}/api/pendencias",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias"
+              ]
+            },
+            "description": "Criar uma nova pendência."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta contém dados da pendência criada\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('id');",
+                  "    pm.environment.set('last_pendencia_id', responseJson.id);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar Pendência - Dados Inválidos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"descricao\": \"\",\n    \"dataPrazo\": \"data-invalida\",\n    \"conformidadeId\": null\n}"
+            },
+            "url": {
+              "raw": "{{host}}/api/pendencias",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias"
+              ]
+            },
+            "description": "Tentar criar uma pendência com dados inválidos."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Atualizar Pendência",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"descricao\": \"Pendência Atualizada {{$timestamp}}\",\n    \"resolvida\": true,\n    \"dataPrazo\": \"2025-07-15\",\n    \"conformidadeId\": \"{{last_conformidade_id}}\",\n    \"acaoCorretiva\": \"Ação corretiva implementada com sucesso\",\n    \"dataResolucao\": \"2025-06-30\"\n}"
+            },
+            "url": {
+              "raw": "{{host}}/api/pendencias/{{last_pendencia_id}}",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias",
+                "{{last_pendencia_id}}"
+              ]
+            },
+            "description": "Atualizar uma pendência existente."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta contém dados atualizados\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('resolvida');",
+                  "    pm.expect(responseJson.resolvida).to.equal(true);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Excluir Pendência",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/pendencias/{{last_pendencia_id}}",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias",
+                "{{last_pendencia_id}}"
+              ]
+            },
+            "description": "Excluir uma pendência existente (requer role ADMIN)."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar Pendências por Conformidade",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/pendencias/conformidade/{{last_conformidade_id}}",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias",
+                "conformidade",
+                "{{last_conformidade_id}}"
+              ]
+            },
+            "description": "Buscar pendências por conformidade."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta é um array de pendências\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar Pendências por Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/pendencias/status/false",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias",
+                "status",
+                "false"
+              ]
+            },
+            "description": "Buscar pendências por status de resolução."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta é um array de pendências\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar Pendências Vencidas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/pendencias/vencidas?data=2025-12-31",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias",
+                "vencidas"
+              ],
+              "query": [
+                {
+                  "key": "data",
+                  "value": "2025-12-31"
+                }
+              ]
+            },
+            "description": "Buscar pendências vencidas até uma data específica."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta é um array de pendências\", function () {",
+                  "    var responseJson = pm.response.json();",
+                  "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "last_auditoria_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "last_conformidade_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "last_pendencia_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "last_log_id",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
