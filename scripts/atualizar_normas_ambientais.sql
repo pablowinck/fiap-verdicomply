@@ -1,0 +1,57 @@
+-- Verifica se as colunas existem e as adiciona se não existirem
+BEGIN
+    -- Verifica e adiciona coluna TITULO se não existir
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE NORMA_AMBIENTAL ADD TITULO VARCHAR2(100)';
+        DBMS_OUTPUT.PUT_LINE('Coluna TITULO adicionada com sucesso');
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE = -01430 THEN -- ORA-01430: column already exists
+                DBMS_OUTPUT.PUT_LINE('Coluna TITULO já existe na tabela');
+            ELSE
+                RAISE;
+            END IF;
+    END;
+
+    -- Verifica e adiciona coluna SEVERIDADE se não existir
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE NORMA_AMBIENTAL ADD SEVERIDADE VARCHAR2(20)';
+        DBMS_OUTPUT.PUT_LINE('Coluna SEVERIDADE adicionada com sucesso');
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE = -01430 THEN -- ORA-01430: column already exists
+                DBMS_OUTPUT.PUT_LINE('Coluna SEVERIDADE já existe na tabela');
+            ELSE
+                RAISE;
+            END IF;
+    END;
+END;
+/
+
+-- Insere normas ambientais básicas se a tabela estiver vazia
+INSERT INTO NORMA_AMBIENTAL (CODIGO_NORMA, TITULO, DESCRICAO, ORGAO_FISCALIZADOR, SEVERIDADE)
+SELECT 'CONAMA-001', 'Resolução CONAMA nº 001', 'Critérios básicos e diretrizes para avaliação de impacto ambiental', 'CONAMA', 'Média'
+FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM NORMA_AMBIENTAL WHERE CODIGO_NORMA = 'CONAMA-001');
+
+INSERT INTO NORMA_AMBIENTAL (CODIGO_NORMA, TITULO, DESCRICAO, ORGAO_FISCALIZADOR, SEVERIDADE)
+SELECT 'ISO-14001', 'ISO 14001:2015', 'Sistema de Gestão Ambiental', 'ISO', 'Alta'
+FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM NORMA_AMBIENTAL WHERE CODIGO_NORMA = 'ISO-14001');
+
+INSERT INTO NORMA_AMBIENTAL (CODIGO_NORMA, TITULO, DESCRICAO, ORGAO_FISCALIZADOR, SEVERIDADE)
+SELECT 'NBR-10004', 'NBR 10004', 'Classificação de resíduos sólidos', 'ABNT', 'Alta'
+FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM NORMA_AMBIENTAL WHERE CODIGO_NORMA = 'NBR-10004');
+
+INSERT INTO NORMA_AMBIENTAL (CODIGO_NORMA, TITULO, DESCRICAO, ORGAO_FISCALIZADOR, SEVERIDADE)
+SELECT 'LEI-12305', 'Lei 12.305/2010', 'Política Nacional de Resíduos Sólidos', 'Governo Federal', 'Alta'
+FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM NORMA_AMBIENTAL WHERE CODIGO_NORMA = 'LEI-12305');
+
+INSERT INTO NORMA_AMBIENTAL (CODIGO_NORMA, TITULO, DESCRICAO, ORGAO_FISCALIZADOR, SEVERIDADE)
+SELECT 'LEI-9605', 'Lei 9.605/1998', 'Lei de Crimes Ambientais', 'Governo Federal', 'Alta'
+FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM NORMA_AMBIENTAL WHERE CODIGO_NORMA = 'LEI-9605');
+
+COMMIT;
