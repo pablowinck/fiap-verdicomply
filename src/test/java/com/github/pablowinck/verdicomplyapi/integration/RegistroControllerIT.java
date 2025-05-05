@@ -1,6 +1,6 @@
 package com.github.pablowinck.verdicomplyapi.integration;
 
-import com.github.pablowinck.verdicomplyapi.config.IntegracaoTestApplication;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Testes de integração para o fluxo de registro de usuários
- * Executado com o perfil "test" e sem mocks
+ * Executado com o perfil "integracao" e sem mocks
  */
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = IntegracaoTestApplication.class)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("integracao")
 public class RegistroControllerIT {
 

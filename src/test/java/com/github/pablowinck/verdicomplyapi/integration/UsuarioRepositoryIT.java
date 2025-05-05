@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.github.pablowinck.verdicomplyapi.config.IntegracaoTestApplication;
+
 import com.github.pablowinck.verdicomplyapi.model.Usuario;
 import com.github.pablowinck.verdicomplyapi.repository.UsuarioRepository;
 
@@ -21,7 +21,7 @@ import com.github.pablowinck.verdicomplyapi.repository.UsuarioRepository;
  * Testes de integração para verificar o carregamento correto dos usuários
  * no banco de dados durante os testes
  */
-@SpringBootTest(classes = IntegracaoTestApplication.class)
+@SpringBootTest
 @ActiveProfiles("integracao")
 public class UsuarioRepositoryIT {
 

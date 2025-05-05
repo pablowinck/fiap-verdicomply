@@ -1,6 +1,6 @@
 package com.github.pablowinck.verdicomplyapi.integration;
 
-import com.github.pablowinck.verdicomplyapi.config.IntegracaoTestApplication;
+
 import com.github.pablowinck.verdicomplyapi.dto.LoginDTO;
 import com.github.pablowinck.verdicomplyapi.dto.RegistroDTO;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * Testes de integração para o fluxo completo de autenticação
  * Executado com o perfil "test" e sem mocks
  */
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = IntegracaoTestApplication.class)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("integracao")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class FluxoAutenticacaoIT {

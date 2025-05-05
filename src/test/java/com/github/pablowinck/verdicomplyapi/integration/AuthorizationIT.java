@@ -24,14 +24,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.github.pablowinck.verdicomplyapi.config.IntegracaoTestApplication;
+
 import com.github.pablowinck.verdicomplyapi.dto.LoginDTO;
 
 /**
  * Testes de integração para a autorização baseada em roles
  * Executado com o perfil "integracao" e sem mocks
  */
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = IntegracaoTestApplication.class)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("integracao")
 public class AuthorizationIT {
 
