@@ -1,5 +1,4 @@
 package com.github.pablowinck.verdicomplyapi.controller;
-
 import com.github.pablowinck.verdicomplyapi.dto.NormaAmbientalDTO;
 import com.github.pablowinck.verdicomplyapi.model.NormaAmbiental;
 import com.github.pablowinck.verdicomplyapi.repository.NormaAmbientalRepository;
@@ -9,27 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controlador para operações REST relacionadas a normas ambientais
- */
 @RestController
 @RequestMapping("/api/normas")
 @Slf4j
 public class NormaAmbientalController {
-
     @Autowired
     private NormaAmbientalRepository normaAmbientalRepository;
 
-    /**
-     * Lista todas as normas ambientais
-     * @return Lista de normas ambientais
-     */
     @GetMapping
     @PreAuthorize("hasAnyRole('AUDITOR', 'GESTOR', 'ADMIN')")
     public ResponseEntity<?> listarNormas() {
@@ -56,11 +46,6 @@ public class NormaAmbientalController {
         }
     }
 
-    /**
-     * Busca uma norma ambiental pelo ID
-     * @param id ID da norma ambiental
-     * @return Norma ambiental
-     */
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('AUDITOR', 'GESTOR', 'ADMIN')")
     public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
@@ -88,11 +73,6 @@ public class NormaAmbientalController {
         }
     }
 
-    /**
-     * Busca normas ambientais pelo órgão fiscalizador
-     * @param orgaoFiscalizador Órgão fiscalizador
-     * @return Lista de normas ambientais
-     */
     @GetMapping("/orgao/{orgaoFiscalizador}")
     @PreAuthorize("hasAnyRole('AUDITOR', 'GESTOR', 'ADMIN')")
     public ResponseEntity<?> buscarPorOrgao(@PathVariable String orgaoFiscalizador) {
@@ -119,11 +99,6 @@ public class NormaAmbientalController {
         }
     }
 
-    /**
-     * Busca uma norma ambiental pelo código
-     * @param codigoNorma Código da norma
-     * @return Norma ambiental
-     */
     @GetMapping("/codigo/{codigoNorma}")
     @PreAuthorize("hasAnyRole('AUDITOR', 'GESTOR', 'ADMIN')")
     public ResponseEntity<?> buscarPorCodigo(@PathVariable String codigoNorma) {
@@ -151,11 +126,6 @@ public class NormaAmbientalController {
         }
     }
 
-    /**
-     * Cria uma nova norma ambiental
-     * @param dto DTO com os dados da norma ambiental
-     * @return Norma ambiental criada
-     */
     @PostMapping
     @PreAuthorize("hasAnyRole('GESTOR', 'ADMIN')")
     public ResponseEntity<?> criarNorma(@Valid @RequestBody NormaAmbientalDTO dto) {
@@ -180,12 +150,6 @@ public class NormaAmbientalController {
         }
     }
 
-    /**
-     * Atualiza uma norma ambiental existente
-     * @param id ID da norma ambiental
-     * @param dto DTO com os dados atualizados
-     * @return Norma ambiental atualizada
-     */
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('GESTOR', 'ADMIN')")
     public ResponseEntity<?> atualizarNorma(@PathVariable Long id, @Valid @RequestBody NormaAmbientalDTO dto) {
@@ -208,11 +172,6 @@ public class NormaAmbientalController {
         }
     }
 
-    /**
-     * Remove uma norma ambiental
-     * @param id ID da norma ambiental
-     * @return 204 No Content
-     */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> removerNorma(@PathVariable Long id) {
@@ -233,11 +192,6 @@ public class NormaAmbientalController {
         }
     }
 
-    /**
-     * Converte uma entidade NormaAmbiental para um DTO
-     * @param norma Entidade NormaAmbiental
-     * @return DTO NormaAmbientalDTO
-     */
     private NormaAmbientalDTO converterParaDTO(NormaAmbiental norma) {
         return NormaAmbientalDTO.builder()
                 .id(norma.getId())
@@ -249,11 +203,6 @@ public class NormaAmbientalController {
                 .build();
     }
 
-    /**
-     * Converte um DTO NormaAmbientalDTO para uma entidade NormaAmbiental
-     * @param dto DTO NormaAmbientalDTO
-     * @return Entidade NormaAmbiental
-     */
     private NormaAmbiental converterParaEntidade(NormaAmbientalDTO dto) {
         return NormaAmbiental.builder()
                 .id(dto.getId())

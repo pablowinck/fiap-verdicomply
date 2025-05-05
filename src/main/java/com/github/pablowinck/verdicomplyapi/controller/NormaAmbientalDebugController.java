@@ -1,44 +1,32 @@
 package com.github.pablowinck.verdicomplyapi.controller;
-
 import com.github.pablowinck.verdicomplyapi.dto.NormaAmbientalDTO;
 import com.github.pablowinck.verdicomplyapi.model.NormaAmbiental;
 import com.github.pablowinck.verdicomplyapi.repository.NormaAmbientalRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.lang.reflect.Field;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controlador para debug das normas ambientais
- */
 @RestController
 @RequestMapping("/api/debug/normas")
 @Slf4j
 public class NormaAmbientalDebugController {
-
     @Autowired
     private NormaAmbientalRepository normaAmbientalRepository;
     
     @PersistenceContext
     private EntityManager entityManager;
 
-    /**
-     * Lista todas as normas ambientais em formato bruto para debug
-     * @return Lista de normas ambientais
-     */
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> listarNormasDebug() {
@@ -71,10 +59,6 @@ public class NormaAmbientalDebugController {
         }
     }
     
-    /**
-     * Conta as normas ambientais cadastradas no sistema
-     * @return Total de normas ambientais
-     */
     @GetMapping("/count")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> contarNormas() {
@@ -95,10 +79,6 @@ public class NormaAmbientalDebugController {
         }
     }
     
-    /**
-     * Verifica o modelo e tabela de normas ambientais
-     * @return Informações sobre o modelo e tabela
-     */
     @GetMapping("/schema")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> verificarSchema() {
@@ -152,10 +132,6 @@ public class NormaAmbientalDebugController {
         }
     }
     
-    /**
-     * Cria uma norma ambiental de teste via SQL nativo
-     * @return Resultado da operação
-     */
     @PostMapping("/create-sql")
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
@@ -185,11 +161,6 @@ public class NormaAmbientalDebugController {
         }
     }
     
-    /**
-     * Cria uma norma ambiental de teste via JPA
-     * @param normaDTO Dados da norma (opcional)
-     * @return Resultado da operação
-     */
     @PostMapping("/create-jpa")
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
