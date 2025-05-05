@@ -197,8 +197,11 @@ Para facilitar o teste e a documentação da API, disponibilizamos uma coleção
 
 ### Como Utilizar
 
+**Importante:** Após subir a aplicação com Docker Compose, recomendamos fortemente importar a collection e as variáveis de ambiente no Postman para testar adequadamente todos os endpoints:
+
 1. Importe a coleção do diretório `postman/verdicomply-api-collection-complete.json` para o Postman
 2. Importe as variáveis de ambiente do diretório `postman/verdicomply-api-environment.json`
+3. Utilize a collection para testar todos os endpoints com as credenciais pré-configuradas
 3. Utilize o endpoint "Autenticar" na pasta "Autenticação" para obter o token JWT
 4. O token será automaticamente configurado para todas as demais requisições da coleção
 
