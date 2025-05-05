@@ -17,16 +17,17 @@ public class NormaAmbientalDTO {
 
     @NotBlank(message = "O código da norma é obrigatório")
     @Size(max = 20, message = "O código deve ter no máximo 20 caracteres")
-    private String codigo;
+    private String codigoNorma;
 
-    @NotBlank(message = "A descrição da norma é obrigatória")
-    @Size(max = 255, message = "A descrição deve ter no máximo 255 caracteres")
+    @Size(max = 100, message = "O título deve ter no máximo 100 caracteres")
+    private String titulo;
+    
+    @Size(max = 200, message = "A descrição deve ter no máximo 200 caracteres")
     private String descricao;
 
-    @NotBlank(message = "O órgão fiscalizador é obrigatório")
     @Size(max = 100, message = "O órgão fiscalizador deve ter no máximo 100 caracteres")
     private String orgaoFiscalizador;
-
-    @Size(max = 255, message = "As observações devem ter no máximo 255 caracteres")
-    private String observacoes;
+    
+    @Size(max = 20, message = "A severidade deve ter no máximo 20 caracteres")
+    private String severidade;
 }

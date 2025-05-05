@@ -21,10 +21,16 @@ public class NormaAmbiental {
     @NotNull
     @Column(name = "CODIGO_NORMA", nullable = false, length = 20)
     private String codigoNorma;
+    
+    @Column(name = "TITULO", length = 100)
+    private String titulo;
 
     @Column(name = "DESCRICAO", length = 200)
     private String descricao;
 
     @Column(name = "ORGAO_FISCALIZADOR", length = 100)
     private String orgaoFiscalizador;
+    
+    @Column(name = "SEVERIDADE", length = 20)
+    private String severidade;
 }

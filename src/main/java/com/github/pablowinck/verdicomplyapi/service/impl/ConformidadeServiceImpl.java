@@ -140,10 +140,11 @@ public class ConformidadeServiceImpl implements ConformidadeService {
             NormaAmbiental norma = conformidade.getNorma();
             normaDTO = NormaAmbientalDTO.builder()
                     .id(norma.getId())
-                    .codigo(norma.getCodigoNorma())
+                    .codigoNorma(norma.getCodigoNorma())
+                    .titulo(norma.getTitulo())
                     .descricao(norma.getDescricao())
                     .orgaoFiscalizador(norma.getOrgaoFiscalizador())
-                    .observacoes(null) // A entidade não possui esse campo
+                    .severidade(norma.getSeveridade())
                     .build();
         }
         
