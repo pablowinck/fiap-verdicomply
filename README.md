@@ -29,8 +29,8 @@ VerdiComply é uma aplicação RESTful para gerenciamento de auditorias ambienta
 1. Clone o repositório:
 
    ```bash
-   git clone https://github.com/pablowinck/verdicomplyapi.git
-   cd verdicomplyapi
+   git clone https://github.com/pablowinck/fiap-verdicomply.git
+   cd fiap-verdicomply
    ```
 
 2. Execute a aplicação utilizando Docker Compose:
@@ -74,8 +74,8 @@ O projeto utiliza Flyway para gerenciar migrações de banco de dados PostgreSQL
 1. Clone o repositório:
 
    ```bash
-   git clone https://github.com/seu-usuario/verdicomplyapi.git
-   cd verdicomplyapi
+   git clone https://github.com/pablowinck/fiap-verdicomply.git
+   cd fiap-verdicomply
    ```
 
 2. Execute a aplicação:
