@@ -62,7 +62,8 @@ class AuditoriaTest {
 
         // Assert
         assertThat(violations).hasSize(1);
-        assertThat(violations.iterator().next().getMessage()).contains("não deve ser nulo");
+        String message = violations.iterator().next().getMessage();
+        assertThat(message).matches(".*((must not be null)|(não deve ser nulo)).*");
     }
 
     @Test
