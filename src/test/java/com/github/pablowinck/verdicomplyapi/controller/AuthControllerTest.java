@@ -2,8 +2,8 @@ package com.github.pablowinck.verdicomplyapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pablowinck.verdicomplyapi.config.TestSecurityConfig;
+import com.github.pablowinck.verdicomplyapi.controller.exception.ManipuladorGlobalDeExcecoes;
 import com.github.pablowinck.verdicomplyapi.dto.LoginDTO;
-import com.github.pablowinck.verdicomplyapi.exception.GlobalExceptionHandler;
 import com.github.pablowinck.verdicomplyapi.security.JwtProperties;
 import com.github.pablowinck.verdicomplyapi.security.JwtTokenProvider;
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AuthController.class)
-@Import({TestSecurityConfig.class, GlobalExceptionHandler.class})
+@Import({TestSecurityConfig.class, ManipuladorGlobalDeExcecoes.class})
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 class AuthControllerTest {

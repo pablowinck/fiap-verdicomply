@@ -49,39 +49,25 @@ VerdiComply é uma aplicação RESTful para gerenciamento de auditorias ambienta
 
 ### Informações sobre Banco de Dados
 
-A aplicação utiliza conexão direta com o servidor Oracle da FIAP com as seguintes configurações:
+A aplicação utiliza **PostgreSQL 16** como banco de dados principal. O Docker Compose gerencia automaticamente a criação e inicialização do banco de dados.
 
-- **URL**: `jdbc:oracle:thin:@oracle.fiap.com.br:1521:orcl`
-- **Usuário**: `RM557024`
-- **Senha**: `240200`
+**Configurações padrão (Docker Compose)**:
+- **Host**: `postgres` (dentro da rede Docker) ou `localhost` (acesso externo)
+- **Porta**: `5433` (mapeada para evitar conflitos com PostgreSQL local)
+- **Database**: `verdicomply`
+- **Usuário**: `verdicomply`
+- **Senha**: `verdicomply`
 
-> **Nota**: Estas credenciais são exclusivas para o ambiente de demonstração e desenvolvimento. Em ambiente de produção, use váriaveis de ambiente ou serviços de gerenciamento de configuração seguros.
-
-### Utilitário de Gerenciamento Oracle
-
-A aplicação fornece um utilitário Java independente para gerenciar o banco de dados Oracle:
-
-```bash
-# Visualizar opções disponíveis
-./oracle-util.sh help
-
-# Listar tabelas e sequências existentes
-./oracle-util.sh list
-
-# Limpar todo o esquema (remove tabelas e sequências)
-./oracle-util.sh clean
-
-# Executar SQL personalizado
-./oracle-util.sh execute "SELECT * FROM USUARIOS"
-```
+> **Nota**: Em ambiente de produção, altere as credenciais usando variáveis de ambiente ou serviços de gerenciamento de configuração seguros.
 
 ### Configuração do Flyway
 
-O projeto utiliza Flyway para gerenciar migrações de banco de dados. As migrações estão configuradas para:
+O projeto utiliza Flyway para gerenciar migrações de banco de dados PostgreSQL. As migrações estão configuradas para:
 
-- Realizar baseline automático quando necessário
-- Executar scripts em ordem correta
-- Funcionar mesmo em ambientes Oracle com restrições de permissões
+- Realizar baseline automático quando necessário (`baseline-on-migrate=true`)
+- Executar scripts em ordem correta a partir de `db/migration/postgresql/`
+- Criar automaticamente tabelas, índices, constraints e dados iniciais
+- Usar convenção de nomenclatura lowercase sem aspas para compatibilidade
 
 ### Desenvolvimento Local
 
@@ -243,6 +229,27 @@ A coleção inclui scripts de pré-requisição e testes para facilitar a execu�
 ```
 
 Para mais detalhes sobre a decisão de arquitetura relacionada à coleção Postman, consulte o documento [ADR_002_Postman_Collection.md](docs/ADR_002_Postman_Collection.md).
+
+### Resultados dos Testes Automatizados
+
+A aplicação possui **100% de taxa de sucesso** nos testes automatizados via Newman:
+
+**Estatísticas dos Testes:**
+- ✅ **70 assertions passando** (100% de sucesso)
+- ✅ **41 requisições executadas** (100% de sucesso)
+- ✅ **0 falhas**
+- ✅ **Tempo médio de resposta**: 24ms
+- ✅ **Tempo total de execução**: ~1.6s
+
+**Executar testes localmente:**
+```bash
+# Garantir que a aplicação está rodando
+docker compose up -d
+
+# Executar testes Newman
+newman run postman/verdicomply-api-collection-complete.json \
+  -e postman/VerdiComply-Dev.postman_environment.json
+```
 
 ---
 

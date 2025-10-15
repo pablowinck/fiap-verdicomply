@@ -47,8 +47,15 @@
             },
             "url": {
               "raw": "{{host}}/api/public/auth/login",
-              "host": ["{{host}}"],
-              "path": ["api", "public", "auth", "login"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "public",
+                "auth",
+                "login"
+              ]
             },
             "description": "Login com credenciais de administrador válidas."
           },
@@ -89,8 +96,15 @@
             },
             "url": {
               "raw": "{{host}}/api/public/auth/login",
-              "host": ["{{host}}"],
-              "path": ["api", "public", "auth", "login"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "public",
+                "auth",
+                "login"
+              ]
             },
             "description": "Login com credenciais inválidas."
           },
@@ -132,8 +146,15 @@
             },
             "url": {
               "raw": "{{host}}/api/public/auth/login",
-              "host": ["{{host}}"],
-              "path": ["api", "public", "auth", "login"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "public",
+                "auth",
+                "login"
+              ]
             },
             "description": "Login com credenciais de auditor válidas."
           },
@@ -176,8 +197,14 @@
             },
             "url": {
               "raw": "{{host}}/api/public/registro",
-              "host": ["{{host}}"],
-              "path": ["api", "public", "registro"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "public",
+                "registro"
+              ]
             },
             "description": "Registrar um novo usuário."
           },
@@ -212,8 +239,14 @@
             },
             "url": {
               "raw": "{{host}}/api/public/registro",
-              "host": ["{{host}}"],
-              "path": ["api", "public", "registro"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "public",
+                "registro"
+              ]
             },
             "description": "Tentar registrar um usuário com username já existente."
           },
@@ -251,8 +284,14 @@
             "header": [],
             "url": {
               "raw": "{{host}}/api/public/health",
-              "host": ["{{host}}"],
-              "path": ["api", "public", "health"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "public",
+                "health"
+              ]
             },
             "description": "Verificar status de saúde da API."
           },
@@ -298,8 +337,13 @@
             ],
             "url": {
               "raw": "{{host}}/api/auditorias",
-              "host": ["{{host}}"],
-              "path": ["api", "auditorias"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auditorias"
+              ]
             },
             "description": "Listar todas as auditorias (requer role ADMIN)."
           },
@@ -338,8 +382,14 @@
             ],
             "url": {
               "raw": "{{host}}/api/auditorias/{{last_auditoria_id}}",
-              "host": ["{{host}}"],
-              "path": ["api", "auditorias", "{{last_auditoria_id}}"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auditorias",
+                "{{last_auditoria_id}}"
+              ]
             },
             "description": "Buscar uma auditoria específica pelo ID."
           },
@@ -370,8 +420,14 @@
             ],
             "url": {
               "raw": "{{host}}/api/auditorias/99999",
-              "host": ["{{host}}"],
-              "path": ["api", "auditorias", "99999"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auditorias",
+                "99999"
+              ]
             },
             "description": "Buscar uma auditoria com ID inexistente."
           },
@@ -416,8 +472,13 @@
             },
             "url": {
               "raw": "{{host}}/api/auditorias",
-              "host": ["{{host}}"],
-              "path": ["api", "auditorias"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auditorias"
+              ]
             },
             "description": "Criar uma nova auditoria."
           },
@@ -456,8 +517,13 @@
             },
             "url": {
               "raw": "{{host}}/api/auditorias",
-              "host": ["{{host}}"],
-              "path": ["api", "auditorias"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auditorias"
+              ]
             },
             "description": "Tentar criar uma auditoria com dados inválidos."
           },
@@ -502,8 +568,14 @@
             },
             "url": {
               "raw": "{{host}}/api/auditorias/{{last_auditoria_id}}",
-              "host": ["{{host}}"],
-              "path": ["api", "auditorias", "{{last_auditoria_id}}"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auditorias",
+                "{{last_auditoria_id}}"
+              ]
             },
             "description": "Atualizar uma auditoria existente."
           },
@@ -534,8 +606,14 @@
             ],
             "url": {
               "raw": "{{host}}/api/auditorias/{{last_auditoria_id}}",
-              "host": ["{{host}}"],
-              "path": ["api", "auditorias", "{{last_auditoria_id}}"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auditorias",
+                "{{last_auditoria_id}}"
+              ]
             },
             "description": "Excluir uma auditoria existente (requer role ADMIN)."
           },
@@ -571,8 +649,15 @@
             ],
             "url": {
               "raw": "{{host}}/api/auditorias/status/PROGRAMADA",
-              "host": ["{{host}}"],
-              "path": ["api", "auditorias", "status", "PROGRAMADA"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auditorias",
+                "status",
+                "PROGRAMADA"
+              ]
             },
             "description": "Buscar auditorias por status."
           },
@@ -608,8 +693,15 @@
             ],
             "url": {
               "raw": "{{host}}/api/auditorias/departamento/1",
-              "host": ["{{host}}"],
-              "path": ["api", "auditorias", "departamento", "1"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auditorias",
+                "departamento",
+                "1"
+              ]
             },
             "description": "Buscar auditorias por departamento."
           },
@@ -655,8 +747,13 @@
             ],
             "url": {
               "raw": "{{host}}/api/conformidades",
-              "host": ["{{host}}"],
-              "path": ["api", "conformidades"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "conformidades"
+              ]
             },
             "description": "Listar todas as conformidades."
           },
@@ -694,8 +791,14 @@
             ],
             "url": {
               "raw": "{{host}}/api/conformidades/{{last_conformidade_id}}",
-              "host": ["{{host}}"],
-              "path": ["api", "conformidades", "{{last_conformidade_id}}"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "conformidades",
+                "{{last_conformidade_id}}"
+              ]
             },
             "description": "Buscar uma conformidade específica pelo ID."
           },
@@ -726,8 +829,14 @@
             ],
             "url": {
               "raw": "{{host}}/api/conformidades/99999",
-              "host": ["{{host}}"],
-              "path": ["api", "conformidades", "99999"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "conformidades",
+                "99999"
+              ]
             },
             "description": "Buscar uma conformidade com ID inexistente."
           },
@@ -772,8 +881,13 @@
             },
             "url": {
               "raw": "{{host}}/api/conformidades",
-              "host": ["{{host}}"],
-              "path": ["api", "conformidades"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "conformidades"
+              ]
             },
             "description": "Criar uma nova conformidade."
           },
@@ -812,8 +926,13 @@
             },
             "url": {
               "raw": "{{host}}/api/conformidades",
-              "host": ["{{host}}"],
-              "path": ["api", "conformidades"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "conformidades"
+              ]
             },
             "description": "Tentar criar uma conformidade com dados inválidos."
           },
@@ -858,84 +977,16 @@
             },
             "url": {
               "raw": "{{host}}/api/conformidades/{{last_conformidade_id}}",
-              "host": ["{{host}}"],
-              "path": ["api", "conformidades", "{{last_conformidade_id}}"]
-            },
-            "description": "Atualizar uma conformidade existente."
-          },
-          "response": []
-        },
-        {
-          "name": "Excluir Conformidade",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status code é 204\", function () {",
-                  "    pm.response.to.have.status(204);",
-                  "});"
-                ]
-              }
-            }
-          ],
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}"
-              }
-            ],
-            "url": {
-              "raw": "{{host}}/api/conformidades/{{last_conformidade_id}}",
-              "host": ["{{host}}"],
-              "path": ["api", "conformidades", "{{last_conformidade_id}}"]
-            },
-            "description": "Excluir uma conformidade existente (requer role ADMIN)."
-          },
-          "response": []
-        },
-        {
-          "name": "Buscar Conformidades por Auditoria",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status code é 200\", function () {",
-                  "    pm.response.to.have.status(200);",
-                  "});",
-                  "",
-                  "pm.test(\"Resposta é um array de conformidades\", function () {",
-                  "    var responseJson = pm.response.json();",
-                  "    pm.expect(Array.isArray(responseJson)).to.be.true;",
-                  "});"
-                ]
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}"
-              }
-            ],
-            "url": {
-              "raw": "{{host}}/api/conformidades/auditoria/{{last_auditoria_id}}",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "path": [
                 "api",
                 "conformidades",
-                "auditoria",
-                "{{last_auditoria_id}}"
+                "{{last_conformidade_id}}"
               ]
             },
-            "description": "Buscar conformidades por auditoria."
+            "description": "Atualizar uma conformidade existente."
           },
           "response": []
         },
@@ -969,8 +1020,15 @@
             ],
             "url": {
               "raw": "{{host}}/api/conformidades/status/true",
-              "host": ["{{host}}"],
-              "path": ["api", "conformidades", "status", "true"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "conformidades",
+                "status",
+                "true"
+              ]
             },
             "description": "Buscar conformidades por status de conformidade."
           },
@@ -1006,8 +1064,15 @@
             ],
             "url": {
               "raw": "{{host}}/api/conformidades/norma/1",
-              "host": ["{{host}}"],
-              "path": ["api", "conformidades", "norma", "1"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "conformidades",
+                "norma",
+                "1"
+              ]
             },
             "description": "Buscar conformidades por norma ambiental."
           },
@@ -1053,8 +1118,13 @@
             ],
             "url": {
               "raw": "{{host}}/api/logs",
-              "host": ["{{host}}"],
-              "path": ["api", "logs"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "logs"
+              ]
             },
             "description": "Listar todos os logs de conformidade (requer roles GESTOR ou ADMIN)."
           },
@@ -1093,8 +1163,14 @@
             ],
             "url": {
               "raw": "{{host}}/api/logs/{{last_log_id}}",
-              "host": ["{{host}}"],
-              "path": ["api", "logs", "{{last_log_id}}"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "logs",
+                "{{last_log_id}}"
+              ]
             },
             "description": "Buscar um log específico pelo ID."
           },
@@ -1125,8 +1201,14 @@
             ],
             "url": {
               "raw": "{{host}}/api/logs/99999",
-              "host": ["{{host}}"],
-              "path": ["api", "logs", "99999"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "logs",
+                "99999"
+              ]
             },
             "description": "Buscar um log com ID inexistente."
           },
@@ -1171,8 +1253,13 @@
             },
             "url": {
               "raw": "{{host}}/api/logs",
-              "host": ["{{host}}"],
-              "path": ["api", "logs"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "logs"
+              ]
             },
             "description": "Criar um novo log de conformidade."
           },
@@ -1211,8 +1298,13 @@
             },
             "url": {
               "raw": "{{host}}/api/logs",
-              "host": ["{{host}}"],
-              "path": ["api", "logs"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "logs"
+              ]
             },
             "description": "Tentar criar um log com dados inválidos."
           },
@@ -1243,8 +1335,14 @@
             ],
             "url": {
               "raw": "{{host}}/api/logs/{{last_log_id}}",
-              "host": ["{{host}}"],
-              "path": ["api", "logs", "{{last_log_id}}"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "logs",
+                "{{last_log_id}}"
+              ]
             },
             "description": "Excluir um log existente (requer role ADMIN)."
           },
@@ -1280,7 +1378,9 @@
             ],
             "url": {
               "raw": "{{host}}/api/logs/conformidade/{{last_conformidade_id}}",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "path": [
                 "api",
                 "logs",
@@ -1322,8 +1422,15 @@
             ],
             "url": {
               "raw": "{{host}}/api/logs/acao/CRIACAO",
-              "host": ["{{host}}"],
-              "path": ["api", "logs", "acao", "CRIACAO"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "logs",
+                "acao",
+                "CRIACAO"
+              ]
             },
             "description": "Buscar logs por tipo de ação."
           },
@@ -1369,8 +1476,13 @@
             ],
             "url": {
               "raw": "{{host}}/api/pendencias",
-              "host": ["{{host}}"],
-              "path": ["api", "pendencias"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias"
+              ]
             },
             "description": "Listar todas as pendências."
           },
@@ -1409,8 +1521,14 @@
             ],
             "url": {
               "raw": "{{host}}/api/pendencias/{{last_pendencia_id}}",
-              "host": ["{{host}}"],
-              "path": ["api", "pendencias", "{{last_pendencia_id}}"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias",
+                "{{last_pendencia_id}}"
+              ]
             },
             "description": "Buscar uma pendência específica pelo ID."
           },
@@ -1441,8 +1559,14 @@
             ],
             "url": {
               "raw": "{{host}}/api/pendencias/99999",
-              "host": ["{{host}}"],
-              "path": ["api", "pendencias", "99999"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias",
+                "99999"
+              ]
             },
             "description": "Buscar uma pendência com ID inexistente."
           },
@@ -1487,8 +1611,13 @@
             },
             "url": {
               "raw": "{{host}}/api/pendencias",
-              "host": ["{{host}}"],
-              "path": ["api", "pendencias"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias"
+              ]
             },
             "description": "Criar uma nova pendência."
           },
@@ -1527,8 +1656,13 @@
             },
             "url": {
               "raw": "{{host}}/api/pendencias",
-              "host": ["{{host}}"],
-              "path": ["api", "pendencias"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias"
+              ]
             },
             "description": "Tentar criar uma pendência com dados inválidos."
           },
@@ -1573,8 +1707,14 @@
             },
             "url": {
               "raw": "{{host}}/api/pendencias/{{last_pendencia_id}}",
-              "host": ["{{host}}"],
-              "path": ["api", "pendencias", "{{last_pendencia_id}}"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias",
+                "{{last_pendencia_id}}"
+              ]
             },
             "description": "Atualizar uma pendência existente."
           },
@@ -1605,8 +1745,14 @@
             ],
             "url": {
               "raw": "{{host}}/api/pendencias/{{last_pendencia_id}}",
-              "host": ["{{host}}"],
-              "path": ["api", "pendencias", "{{last_pendencia_id}}"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias",
+                "{{last_pendencia_id}}"
+              ]
             },
             "description": "Excluir uma pendência existente (requer role ADMIN)."
           },
@@ -1642,7 +1788,9 @@
             ],
             "url": {
               "raw": "{{host}}/api/pendencias/conformidade/{{last_conformidade_id}}",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "path": [
                 "api",
                 "pendencias",
@@ -1684,8 +1832,15 @@
             ],
             "url": {
               "raw": "{{host}}/api/pendencias/status/false",
-              "host": ["{{host}}"],
-              "path": ["api", "pendencias", "status", "false"]
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias",
+                "status",
+                "false"
+              ]
             },
             "description": "Buscar pendências por status de resolução."
           },
@@ -1721,8 +1876,14 @@
             ],
             "url": {
               "raw": "{{host}}/api/pendencias/vencidas?data=2025-12-31",
-              "host": ["{{host}}"],
-              "path": ["api", "pendencias", "vencidas"],
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "pendencias",
+                "vencidas"
+              ],
               "query": [
                 {
                   "key": "data",
@@ -1743,14 +1904,18 @@
       "listen": "prerequest",
       "script": {
         "type": "text/javascript",
-        "exec": [""]
+        "exec": [
+          ""
+        ]
       }
     },
     {
       "listen": "test",
       "script": {
         "type": "text/javascript",
-        "exec": [""]
+        "exec": [
+          ""
+        ]
       }
     }
   ],

@@ -4,18 +4,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Sobre o Projeto
 
-VerdiComply é uma API RESTful desenvolvida em Spring Boot para gerenciamento de auditorias ambientais, incluindo conformidades com normas ambientais e o gerenciamento de pendências. A aplicação utiliza Oracle Database (servidor FIAP) e implementa autenticação JWT com controle de acesso baseado em papéis (RBAC).
+VerdiComply é uma API RESTful desenvolvida em Spring Boot para gerenciamento de auditorias ambientais, incluindo conformidades com normas ambientais e o gerenciamento de pendências. A aplicação utiliza PostgreSQL 16 como banco de dados e implementa autenticação JWT com controle de acesso baseado em papéis (RBAC).
 
 ## Stack Tecnológica
 
 - **Framework**: Spring Boot 3.4.5
 - **Java**: 17
 - **Build Tool**: Maven 3.9.9
-- **Database**: Oracle Database (servidor FIAP em produção)
+- **Database**: PostgreSQL 16
 - **Migrações**: Flyway
 - **Segurança**: Spring Security com JWT
 - **Containerização**: Docker e Docker Compose
-- **Testes**: JUnit 5, RestAssured, H2 (in-memory para testes)
+- **Testes**: JUnit 5, RestAssured, H2 (in-memory para testes), Newman (Postman CLI)
 
 ## Comandos Essenciais
 
@@ -41,35 +41,34 @@ mvn verify
 ### Docker
 
 ```bash
-# Subir a aplicação com Docker Compose
+# Subir a aplicação com Docker Compose (PostgreSQL + App)
 docker compose up -d
-
-# Subir com limpeza do esquema Oracle
-./deploy-with-clean.sh
 
 # Ver logs da aplicação
 docker logs verdicomply-api -f
 
-# Parar e remover containers
+# Ver logs do PostgreSQL
+docker logs verdicomply-postgres -f
+
+# Parar containers
 docker compose down
+
+# Parar e remover volumes (limpar dados)
+docker compose down -v
 ```
 
-### Utilitário Oracle
-
-O projeto inclui um utilitário Java independente para gerenciar o banco Oracle da FIAP:
+### Testes Automatizados com Newman
 
 ```bash
-# Ver opções disponíveis
-./oracle-util.sh help
+# Executar todos os testes Postman via Newman
+newman run postman/verdicomply-api-collection-complete.json \
+  -e postman/VerdiComply-Dev.postman_environment.json
 
-# Listar tabelas e sequências
-./oracle-util.sh list
-
-# Limpar todo o esquema (remove tabelas e sequências)
-./oracle-util.sh clean
-
-# Executar SQL personalizado
-./oracle-util.sh execute "SELECT * FROM USUARIOS"
+# Resultados esperados:
+# - 70 assertions passando (100% de sucesso)
+# - 41 requisições executadas (100% de sucesso)
+# - 0 falhas
+# - Tempo médio: ~24ms
 ```
 
 ## Arquitetura e Estrutura
@@ -117,22 +116,23 @@ Body: {"username": "admin", "password": "admin123"}
 
 ### Migrações Flyway
 
-As migrações estão em `src/main/resources/db/migration/`:
+As migrações estão em `src/main/resources/db/migration/postgresql/`:
 
-- `V1__criar_tabelas_base.sql`: Tabelas principais (departamentos, auditorias, conformidades, pendências, logs)
-- `V2__inserir_dados_iniciais.sql`: Dados de seed (departamentos, normas, usuários de teste)
-- `V3__criar_triggers_e_procedures.sql`: Triggers para auditoria automática
-- `V4__criar_tabela_usuarios.sql`: Tabela de usuários e roles
+- `V1__criar_tabelas_base.sql`: Tabelas principais em lowercase (departamento, auditoria, norma_ambiental, conformidade, pendencia, log_conformidade)
+- `V2__inserir_dados_iniciais.sql`: Dados de seed (departamentos, normas ambientais)
+- `V3__criar_indices.sql`: Índices para otimização de queries
+- `V4__criar_tabela_usuarios.sql`: Tabela de usuários com senhas BCrypt
 
-**Configuração Flyway**: O projeto usa `baseline-on-migrate=true` para funcionar em ambientes Oracle com permissões restritas.
+**Configuração Flyway**: O projeto usa `baseline-on-migrate=true` e convenção lowercase sem aspas para compatibilidade com PostgreSQL.
+
+**IMPORTANTE**: Todas as tabelas e colunas usam **lowercase sem aspas** (auditoria, id_auditoria, data_auditoria, etc.)
 
 ### Profiles do Spring
 
-- **default** (local): Oracle local em `localhost:1521`
-- **prod**: Oracle FIAP em `oracle.fiap.com.br:1521:orcl` (usado no Docker)
-- **test**: H2 in-memory para testes unitários
-- **integracao**: H2 in-memory para testes de integração
-- **util**: Profile especial para utilitários de banco
+- **default** (local): PostgreSQL local em `localhost:5432`
+- **prod**: PostgreSQL Docker em `postgres:5432` (usado no Docker Compose)
+- **test**: H2 in-memory (PostgreSQL mode) para testes unitários
+- **integracao**: H2 in-memory (PostgreSQL mode) para testes de integração
 
 ### Convenções de Testes
 
@@ -149,18 +149,16 @@ As migrações estão em `src/main/resources/db/migration/`:
 
 ```
 com.github.pablowinck.verdicomplyapi/
-├── config/              # Configurações Spring (CORS, Database, Initializers)
+├── config/              # Configurações Spring (CORS, Database)
 ├── controller/          # Controllers REST
-│   └── exception/       # Exception handlers globais
+│   └── exception/       # Exception handlers (ManipuladorGlobalDeExcecoes)
 ├── dto/                 # Data Transfer Objects
-├── exception/           # Exceções customizadas
-├── model/               # Entidades JPA
+├── model/               # Entidades JPA (lowercase naming)
 ├── repository/          # Interfaces Spring Data JPA
 ├── security/            # Configuração JWT e Spring Security
 ├── service/             # Interfaces de serviço
 │   ├── impl/           # Implementações de serviço
-│   └── exception/      # Exceções de serviço
-└── utils/              # Utilitários (OracleSchemaUtil, DatabaseUtilApplication)
+│   └── exception/      # Exceções de serviço (RecursoNaoEncontradoException)
 ```
 
 ## Usuários de Teste
@@ -173,23 +171,28 @@ Três usuários são criados automaticamente pelas migrações:
 
 ## Banco de Dados
 
-### Conexão Oracle FIAP (Produção/Docker)
+### Conexão PostgreSQL (Docker Compose)
 
-- **URL**: `jdbc:oracle:thin:@oracle.fiap.com.br:1521:orcl`
-- **User**: `RM557024`
-- **Password**: `240200`
+**Configurações padrão**:
+- **Host**: `postgres` (dentro da rede Docker) ou `localhost:5433` (acesso externo)
+- **Database**: `verdicomply`
+- **User**: `verdicomply`
+- **Password**: `verdicomply`
+- **Porta**: `5432` (interna) / `5433` (externa)
 
-**Nota**: Estas credenciais são públicas apenas para ambiente de demonstração acadêmica.
+**Nota**: Em produção, altere as credenciais usando variáveis de ambiente.
 
-### Tabelas Principais
+### Tabelas Principais (lowercase)
 
-- **DEPARTAMENTOS**: Departamentos organizacionais
-- **AUDITORIAS**: Auditorias ambientais por departamento
-- **NORMAS_AMBIENTAIS**: Normas e regulamentações ambientais
-- **CONFORMIDADES**: Status de conformidade por auditoria e norma
-- **PENDENCIAS**: Ações pendentes para resolver não-conformidades
-- **LOGS_CONFORMIDADE**: Histórico de alterações em conformidades
-- **USUARIOS**: Usuários do sistema com senha BCrypt
+- **departamento**: Departamentos organizacionais
+- **auditoria**: Auditorias ambientais por departamento
+- **norma_ambiental**: Normas e regulamentações ambientais
+- **conformidade**: Status de conformidade por auditoria e norma
+- **pendencia**: Ações pendentes para resolver não-conformidades
+- **log_conformidade**: Histórico de alterações em conformidades
+- **usuarios**: Usuários do sistema com senha BCrypt
+
+**IMPORTANTE**: Todas as tabelas e colunas usam **snake_case lowercase** sem aspas.
 
 ## Dicas de Desenvolvimento
 
