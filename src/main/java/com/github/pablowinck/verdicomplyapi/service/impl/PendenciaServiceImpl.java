@@ -111,10 +111,9 @@ public class PendenciaServiceImpl implements PendenciaService {
         return Pendencia.builder()
                 .id(dto.getId())
                 .conformidade(conformidade)
-                .descricaoPendencia(dto.getDescricao())
+                .descricaoPendencia(dto.getDescricaoPendencia())
                 .prazoResolucao(dto.getPrazoResolucao())
                 .resolvida(dto.getResolvida())
-                // Nota: a entidade não possui os campos dataResolucao e observacoes
                 .build();
     }
 
@@ -127,12 +126,9 @@ public class PendenciaServiceImpl implements PendenciaService {
         return PendenciaDTO.builder()
                 .id(pendencia.getId())
                 .conformidadeId(pendencia.getConformidade() != null ? pendencia.getConformidade().getId() : null)
-                .descricao(pendencia.getDescricaoPendencia())
+                .descricaoPendencia(pendencia.getDescricaoPendencia())
                 .prazoResolucao(pendencia.getPrazoResolucao())
                 .resolvida(pendencia.getResolvida())
-                // Estes campos não existem na entidade, mas constam no DTO
-                .dataResolucao(null)
-                .observacoes(null)
                 .conformidade(conformidadeDTO)
                 .build();
     }

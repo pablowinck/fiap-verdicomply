@@ -10,9 +10,11 @@ VerdiComply é uma aplicação RESTful para gerenciamento de auditorias ambienta
 - Spring Boot 3.4.5
 - Spring Security (Autenticação JWT + Controle de Acesso Baseado em Papéis)
 - Spring Data JPA
-- Oracle Database (servidor FIAP)
+- PostgreSQL 16 (migrado do Oracle)
+- H2 Database (para testes)
 - Flyway para migrações de banco de dados
 - Docker e Docker Compose para conteinerização
+- GitHub Actions para CI/CD
 
 ## Pré-requisitos
 
@@ -241,3 +243,136 @@ A coleção inclui scripts de pré-requisição e testes para facilitar a execu�
 ```
 
 Para mais detalhes sobre a decisão de arquitetura relacionada à coleção Postman, consulte o documento [ADR_002_Postman_Collection.md](docs/ADR_002_Postman_Collection.md).
+
+---
+
+## DevOps e CI/CD
+
+### Containerização
+
+A aplicação está containerizada usando Docker com uma estratégia multi-stage build para otimizar o tamanho da imagem final.
+
+#### Dockerfile
+
+- **Stage 1 (Build)**: Utiliza `maven:3.9-eclipse-temurin-17` para compilar a aplicação
+- **Stage 2 (Runtime)**: Utiliza `eclipse-temurin:17-jre` (imagem mais leve) para executar a aplicação
+- **Otimizações**:
+  - Cache de dependências Maven
+  - Usuário não-root para segurança
+  - Configuração de JVM otimizada para containers
+
+#### Docker Compose
+
+O `docker-compose.yml` inclui:
+
+- **Serviço da Aplicação**: Spring Boot API na porta 8080
+- **PostgreSQL**: Banco de dados na porta 5433 (para evitar conflitos locais)
+- **Volumes**: Persistência de dados do PostgreSQL
+- **Rede**: Rede isolada `verdicomply-network`
+- **Health Checks**: Garantem que o PostgreSQL está pronto antes de iniciar a aplicação
+
+**Como executar com Docker Compose:**
+
+```bash
+# Subir todos os serviços
+docker compose up -d
+
+# Ver logs
+docker compose logs -f
+
+# Parar serviços
+docker compose down
+
+# Parar e remover volumes (limpar dados)
+docker compose down -v
+```
+
+### Pipeline CI/CD
+
+O projeto implementa um pipeline completo de CI/CD usando GitHub Actions (`.github/workflows/ci-cd.yml`).
+
+#### Etapas do Pipeline
+
+**1. Build and Test**
+- Checkout do código
+- Setup do JDK 17 com cache do Maven
+- Build da aplicação
+- Execução de testes unitários
+- Execução de testes de integração
+- Geração de relatórios de cobertura
+- Upload de artefatos (JAR)
+
+**2. Docker Build and Push**
+- Configuração do Docker Buildx
+- Login no Docker Hub
+- Build da imagem Docker
+- Push para Docker Hub com tags:
+  - `latest` (branch main)
+  - `develop` (branch develop)
+  - `<branch>-<sha>` (hash do commit)
+- Cache de layers para builds mais rápidos
+
+**3. Deploy to Staging** (branch develop)
+- Deploy automático para ambiente de staging
+- Execução de smoke tests
+- URL: `https://staging.verdicomply.com`
+
+**4. Deploy to Production** (branch main)
+- Deploy para produção
+- Execução de smoke tests
+- Notificação de deploy bem-sucedido
+- URL: `https://verdicomply.com`
+
+#### Configuração de Secrets
+
+Para que o pipeline funcione, configure os seguintes secrets no GitHub:
+
+- `DOCKER_USERNAME`: Seu usuário do Docker Hub
+- `DOCKER_PASSWORD`: Sua senha ou token do Docker Hub
+
+**Como configurar:**
+1. Vá em Settings > Secrets and variables > Actions
+2. Adicione os secrets necessários
+
+#### Testes Automatizados
+
+O pipeline executa:
+
+- **Testes Unit ários** com profile `unit-tests`
+- **Testes de Integração** com profile `integration-tests` usando H2 in-memory
+- **Testes via Newman**: As collections Postman podem ser executadas automaticamente
+
+### Migração Oracle → PostgreSQL
+
+A aplicação foi migrada de Oracle para PostgreSQL incluindo:
+
+1. **Dependências**:
+   - Removido `ojdbc11` e `flyway-database-oracle`
+   - Adicionado `postgresql` e `flyway-database-postgresql`
+
+2. **Migrações SQL**:
+   - Convertidas de sintaxe Oracle para PostgreSQL
+   - Criadas em `db/migration/postgresql/`
+   - Utilizadas aspas duplas para preservar case-sensitivity dos nomes
+
+3. **Testes**:
+   - H2 em modo PostgreSQL para testes unitários e de integração
+   - Flyway desabilitado em testes (usa schema.sql e data.sql)
+
+### Ambientes
+
+- **Local**: Docker Compose com PostgreSQL local
+- **Teste**: H2 in-memory (PostgreSQL mode)
+- **Staging**: Deploy automático via GitHub Actions (branch develop)
+- **Production**: Deploy automático via GitHub Actions (branch main)
+
+### Tecnologias DevOps
+
+- **Containerização**: Docker, Docker Compose
+- **CI/CD**: GitHub Actions
+- **Banco de Dados**: PostgreSQL 16
+- **Build**: Maven 3.9.9
+- **Testes**: JUnit 5, RestAssured, Newman (Postman CLI)
+- **Registry**: Docker Hub
+
+Para mais detalhes técnicos, consulte `DOCUMENTACAO.md`.

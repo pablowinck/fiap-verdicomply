@@ -21,7 +21,8 @@ import lombok.extern.slf4j.Slf4j;
  * Inicializador de dados para ambiente de produção
  * Esta classe garante que dados essenciais (como usuário admin) estão disponíveis
  */
-@Configuration
+// Desabilitado temporariamente - dados são inseridos via Flyway migrations
+//@Configuration
 // @Profile("prod") // Removido para permitir inicialização em qualquer perfil
 @Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -29,18 +30,18 @@ public class ProdDataInitializer {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
-    
+
     @Autowired
     private DepartamentoRepository departamentoRepository;
-    
+
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+
     /**
      * Inicializa os dados essenciais quando o contexto da aplicação é carregado
      */
-    @EventListener(ContextRefreshedEvent.class)
-    @Transactional
+    //@EventListener(ContextRefreshedEvent.class)
+    //@Transactional
     public void onApplicationEvent() {
         log.info("Inicializando dados essenciais para ambiente de produção");
         try {

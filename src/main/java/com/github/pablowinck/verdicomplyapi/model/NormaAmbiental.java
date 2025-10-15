@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity
-@Table(name = "NORMA_AMBIENTAL")
+@Table(name = "norma_ambiental")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,22 +15,22 @@ public class NormaAmbiental {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_NORMA")
+    @Column(name = "id_norma")
     private Long id;
 
     @NotNull
-    @Column(name = "CODIGO_NORMA", nullable = false, length = 20)
+    @Column(name = "codigo_norma", nullable = false, length = 20)
     private String codigoNorma;
-    
-    @Column(name = "TITULO", length = 100)
+
+    @Column(name = "titulo", length = 100)
     private String titulo;
 
-    @Column(name = "DESCRICAO", length = 200)
+    @Column(name = "descricao", length = 200)
     private String descricao;
 
-    @Column(name = "ORGAO_FISCALIZADOR", length = 100)
+    @Column(name = "orgao_fiscalizador", length = 100)
     private String orgaoFiscalizador;
-    
-    @Column(name = "SEVERIDADE", length = 20)
+
+    @Column(name = "severidade", length = 20)
     private String severidade;
 }

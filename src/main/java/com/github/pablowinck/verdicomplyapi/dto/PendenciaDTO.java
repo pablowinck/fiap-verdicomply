@@ -23,8 +23,8 @@ public class PendenciaDTO {
     private Long conformidadeId;
 
     @NotBlank(message = "A descrição da pendência é obrigatória")
-    @Size(max = 255, message = "A descrição deve ter no máximo 255 caracteres")
-    private String descricao;
+    @Size(max = 200, message = "A descrição deve ter no máximo 200 caracteres")
+    private String descricaoPendencia;
 
     @NotNull(message = "O prazo de resolução é obrigatório")
     private LocalDate prazoResolucao;
@@ -32,11 +32,6 @@ public class PendenciaDTO {
     @NotBlank(message = "O status de resolução é obrigatório")
     @Pattern(regexp = "^[SN]$", message = "O valor deve ser 'S' para resolvida ou 'N' para não resolvida")
     private String resolvida;
-
-    private LocalDate dataResolucao;
-
-    @Size(max = 255, message = "As observações devem ter no máximo 255 caracteres")
-    private String observacoes;
 
     private ConformidadeDTO conformidade;
 }

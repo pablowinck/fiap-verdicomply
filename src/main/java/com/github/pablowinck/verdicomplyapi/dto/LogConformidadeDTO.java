@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -22,18 +22,14 @@ public class LogConformidadeDTO {
     private Long conformidadeId;
 
     @NotBlank(message = "A ação é obrigatória")
-    @Size(max = 50, message = "A ação deve ter no máximo 50 caracteres")
+    @Size(max = 20, message = "A ação deve ter no máximo 20 caracteres")
     private String acao;
 
-    @NotNull(message = "A data é obrigatória")
-    private LocalDateTime dataHora;
+    @NotNull(message = "A data de registro é obrigatória")
+    private LocalDate dataRegistro;
 
-    @NotBlank(message = "O usuário é obrigatório")
-    @Size(max = 100, message = "O usuário deve ter no máximo 100 caracteres")
-    private String usuario;
-
-    @Size(max = 255, message = "As observações devem ter no máximo 255 caracteres")
-    private String observacoes;
+    @Size(max = 200, message = "Os detalhes devem ter no máximo 200 caracteres")
+    private String detalhes;
 
     private ConformidadeDTO conformidade;
 }

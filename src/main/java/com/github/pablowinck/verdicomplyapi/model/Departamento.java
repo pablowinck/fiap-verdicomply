@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity
-@Table(name = "DEPARTAMENTO")
+@Table(name = "departamento")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,10 +15,10 @@ public class Departamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_DEPARTAMENTO")
+    @Column(name = "id_departamento")
     private Long id;
 
     @NotNull
-    @Column(name = "NOME_DEPARTAMENTO", nullable = false, length = 100)
+    @Column(name = "nome_departamento", nullable = false, length = 100)
     private String nomeDepartamento;
 }

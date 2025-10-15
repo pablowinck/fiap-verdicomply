@@ -57,7 +57,7 @@ class ConformidadeControllerTest {
                 .auditoriaId(1L)
                 .normaAmbientalId(1L)
                 .estaConforme("S")
-                .observacoes("Conforme às normas ambientais")
+                .observacao("Conforme às normas ambientais")
                 .build();
 
         ConformidadeDTO conformidade2 = ConformidadeDTO.builder()
@@ -65,7 +65,7 @@ class ConformidadeControllerTest {
                 .auditoriaId(1L)
                 .normaAmbientalId(2L)
                 .estaConforme("N")
-                .observacoes("Não conforme às normas ambientais")
+                .observacao("Não conforme às normas ambientais")
                 .build();
 
         List<ConformidadeDTO> conformidades = Arrays.asList(conformidade1, conformidade2);
@@ -96,7 +96,7 @@ class ConformidadeControllerTest {
                 .auditoriaId(1L)
                 .normaAmbientalId(1L)
                 .estaConforme("S")
-                .observacoes("Conforme às normas ambientais")
+                .observacao("Conforme às normas ambientais")
                 .auditoria(AuditoriaDTO.builder().id(1L).build())
                 .normaAmbiental(NormaAmbientalDTO.builder().id(1L).build())
                 .build();
@@ -138,7 +138,7 @@ class ConformidadeControllerTest {
                 .auditoriaId(1L)
                 .normaAmbientalId(1L)
                 .estaConforme("S")
-                .observacoes("Conforme às normas ambientais")
+                .observacao("Conforme às normas ambientais")
                 .build();
 
         ConformidadeDTO conformidadeCriada = ConformidadeDTO.builder()
@@ -146,7 +146,7 @@ class ConformidadeControllerTest {
                 .auditoriaId(1L)
                 .normaAmbientalId(1L)
                 .estaConforme("S")
-                .observacoes("Conforme às normas ambientais")
+                .observacao("Conforme às normas ambientais")
                 .auditoria(AuditoriaDTO.builder().id(1L).build())
                 .normaAmbiental(NormaAmbientalDTO.builder().id(1L).build())
                 .build();
@@ -174,7 +174,7 @@ class ConformidadeControllerTest {
                 .auditoriaId(1L)
                 .normaAmbientalId(1L)
                 .estaConforme("N")
-                .observacoes("Não conforme às normas ambientais")
+                .observacao("Não conforme às normas ambientais")
                 .build();
 
         ConformidadeDTO conformidadeAtualizada = ConformidadeDTO.builder()
@@ -182,7 +182,7 @@ class ConformidadeControllerTest {
                 .auditoriaId(1L)
                 .normaAmbientalId(1L)
                 .estaConforme("N")
-                .observacoes("Não conforme às normas ambientais")
+                .observacao("Não conforme às normas ambientais")
                 .auditoria(AuditoriaDTO.builder().id(1L).build())
                 .normaAmbiental(NormaAmbientalDTO.builder().id(1L).build())
                 .build();
@@ -226,7 +226,7 @@ class ConformidadeControllerTest {
                 .auditoriaId(auditoriaId)
                 .normaAmbientalId(1L)
                 .estaConforme("S")
-                .observacoes("Conforme às normas ambientais")
+                .observacao("Conforme às normas ambientais")
                 .build();
 
         ConformidadeDTO conformidade2 = ConformidadeDTO.builder()
@@ -234,7 +234,7 @@ class ConformidadeControllerTest {
                 .auditoriaId(auditoriaId)
                 .normaAmbientalId(2L)
                 .estaConforme("N")
-                .observacoes("Não conforme às normas ambientais")
+                .observacao("Não conforme às normas ambientais")
                 .build();
 
         List<ConformidadeDTO> conformidades = Arrays.asList(conformidade1, conformidade2);
@@ -265,7 +265,7 @@ class ConformidadeControllerTest {
                 .auditoriaId(1L)
                 .normaAmbientalId(1L)
                 .estaConforme(status)
-                .observacoes("Conforme às normas ambientais")
+                .observacao("Conforme às normas ambientais")
                 .build();
 
         ConformidadeDTO conformidade2 = ConformidadeDTO.builder()
@@ -273,7 +273,7 @@ class ConformidadeControllerTest {
                 .auditoriaId(2L)
                 .normaAmbientalId(1L)
                 .estaConforme(status)
-                .observacoes("Conforme às normas ambientais")
+                .observacao("Conforme às normas ambientais")
                 .build();
 
         List<ConformidadeDTO> conformidades = Arrays.asList(conformidade1, conformidade2);
@@ -304,7 +304,7 @@ class ConformidadeControllerTest {
                 .auditoriaId(1L)
                 .normaAmbientalId(normaId)
                 .estaConforme("S")
-                .observacoes("Conforme às normas ambientais")
+                .observacao("Conforme às normas ambientais")
                 .build();
 
         ConformidadeDTO conformidade2 = ConformidadeDTO.builder()
@@ -312,7 +312,7 @@ class ConformidadeControllerTest {
                 .auditoriaId(2L)
                 .normaAmbientalId(normaId)
                 .estaConforme("N")
-                .observacoes("Não conforme às normas ambientais")
+                .observacao("Não conforme às normas ambientais")
                 .build();
 
         List<ConformidadeDTO> conformidades = Arrays.asList(conformidade1, conformidade2);

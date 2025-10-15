@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 @Entity
-@Table(name = "CONFORMIDADE")
+@Table(name = "conformidade")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,23 +16,23 @@ public class Conformidade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_CONFORMIDADE")
+    @Column(name = "id_conformidade")
     private Long id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_AUDITORIA", nullable = false)
+    @JoinColumn(name = "id_auditoria", nullable = false)
     private Auditoria auditoria;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_NORMA", nullable = false)
+    @JoinColumn(name = "id_norma", nullable = false)
     private NormaAmbiental norma;
 
     @Pattern(regexp = "[SN]", message = "O valor deve ser 'S' para conforme ou 'N' para não conforme")
-    @Column(name = "ESTA_CONFORME", length = 1)
+    @Column(name = "esta_conforme", length = 1)
     private String estaConforme;
 
-    @Column(name = "OBSERVACAO", length = 200)
+    @Column(name = "observacao", length = 200)
     private String observacao;
 }

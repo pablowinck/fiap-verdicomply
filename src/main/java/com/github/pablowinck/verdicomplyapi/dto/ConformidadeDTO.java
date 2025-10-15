@@ -27,8 +27,8 @@ public class ConformidadeDTO {
     @Pattern(regexp = "^[SN]$", message = "O valor deve ser 'S' para conforme ou 'N' para não conforme")
     private String estaConforme;
 
-    @Size(max = 255, message = "As observações devem ter no máximo 255 caracteres")
-    private String observacoes;
+    @Size(max = 200, message = "A observação deve ter no máximo 200 caracteres")
+    private String observacao;
 
     private AuditoriaDTO auditoria;
     private NormaAmbientalDTO normaAmbiental;

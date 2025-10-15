@@ -118,7 +118,7 @@ public class ConformidadeServiceImpl implements ConformidadeService {
                 .auditoria(auditoria)
                 .norma(normaAmbiental)
                 .estaConforme(dto.getEstaConforme())
-                .observacao(dto.getObservacoes())
+                .observacao(dto.getObservacao())
                 .build();
     }
 
@@ -153,7 +153,7 @@ public class ConformidadeServiceImpl implements ConformidadeService {
                 .auditoriaId(conformidade.getAuditoria() != null ? conformidade.getAuditoria().getId() : null)
                 .normaAmbientalId(conformidade.getNorma() != null ? conformidade.getNorma().getId() : null)
                 .estaConforme(conformidade.getEstaConforme())
-                .observacoes(conformidade.getObservacao())
+                .observacao(conformidade.getObservacao())
                 .auditoria(auditoriaDTO)
                 .normaAmbiental(normaDTO)
                 .build();

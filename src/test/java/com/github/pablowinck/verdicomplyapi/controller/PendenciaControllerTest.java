@@ -57,7 +57,7 @@ class PendenciaControllerTest {
         PendenciaDTO pendencia1 = PendenciaDTO.builder()
                 .id(1L)
                 .conformidadeId(1L)
-                .descricao("Instalação de filtros adequados")
+                .descricaoPendencia("Instalação de filtros adequados")
                 .prazoResolucao(prazoResolucao)
                 .resolvida("N")
                 .build();
@@ -65,7 +65,7 @@ class PendenciaControllerTest {
         PendenciaDTO pendencia2 = PendenciaDTO.builder()
                 .id(2L)
                 .conformidadeId(2L)
-                .descricao("Substituição de equipamentos obsoletos")
+                .descricaoPendencia("Substituição de equipamentos obsoletos")
                 .prazoResolucao(prazoResolucao.plusDays(30))
                 .resolvida("N")
                 .build();
@@ -80,9 +80,9 @@ class PendenciaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].descricao", is("Instalação de filtros adequados")))
+                .andExpect(jsonPath("$[0].descricaoPendencia", is("Instalação de filtros adequados")))
                 .andExpect(jsonPath("$[1].id", is(2)))
-                .andExpect(jsonPath("$[1].descricao", is("Substituição de equipamentos obsoletos")));
+                .andExpect(jsonPath("$[1].descricaoPendencia", is("Substituição de equipamentos obsoletos")));
 
         verify(pendenciaService, times(1)).listarTodas();
     }
@@ -98,7 +98,7 @@ class PendenciaControllerTest {
         PendenciaDTO pendencia = PendenciaDTO.builder()
                 .id(id)
                 .conformidadeId(1L)
-                .descricao("Instalação de filtros adequados")
+                .descricaoPendencia("Instalação de filtros adequados")
                 .prazoResolucao(prazoResolucao)
                 .resolvida("N")
                 .conformidade(ConformidadeDTO.builder().id(1L).build())
@@ -111,7 +111,7 @@ class PendenciaControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.descricao", is("Instalação de filtros adequados")));
+                .andExpect(jsonPath("$.descricaoPendencia", is("Instalação de filtros adequados")));
 
         verify(pendenciaService, times(1)).buscarPorId(id);
     }
@@ -141,7 +141,7 @@ class PendenciaControllerTest {
         
         PendenciaDTO pendenciaDTO = PendenciaDTO.builder()
                 .conformidadeId(1L)
-                .descricao("Instalação de filtros adequados")
+                .descricaoPendencia("Instalação de filtros adequados")
                 .prazoResolucao(prazoResolucao)
                 .resolvida("N")
                 .build();
@@ -149,7 +149,7 @@ class PendenciaControllerTest {
         PendenciaDTO pendenciaCriada = PendenciaDTO.builder()
                 .id(1L)
                 .conformidadeId(1L)
-                .descricao("Instalação de filtros adequados")
+                .descricaoPendencia("Instalação de filtros adequados")
                 .prazoResolucao(prazoResolucao)
                 .resolvida("N")
                 .conformidade(ConformidadeDTO.builder().id(1L).build())
@@ -163,7 +163,7 @@ class PendenciaControllerTest {
                         .content(objectMapper.writeValueAsString(pendenciaDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.descricao", is("Instalação de filtros adequados")));
+                .andExpect(jsonPath("$.descricaoPendencia", is("Instalação de filtros adequados")));
 
         verify(pendenciaService, times(1)).criar(any(PendenciaDTO.class));
     }
@@ -178,21 +178,17 @@ class PendenciaControllerTest {
         
         PendenciaDTO pendenciaDTO = PendenciaDTO.builder()
                 .conformidadeId(1L)
-                .descricao("Instalação de filtros de alta performance")
+                .descricaoPendencia("Instalação de filtros de alta performance")
                 .prazoResolucao(prazoResolucao)
                 .resolvida("S")
-                .dataResolucao(LocalDate.now())
-                .observacoes("Instalados filtros conforme especificação")
                 .build();
 
         PendenciaDTO pendenciaAtualizada = PendenciaDTO.builder()
                 .id(id)
                 .conformidadeId(1L)
-                .descricao("Instalação de filtros de alta performance")
+                .descricaoPendencia("Instalação de filtros de alta performance")
                 .prazoResolucao(prazoResolucao)
                 .resolvida("S")
-                .dataResolucao(LocalDate.now())
-                .observacoes("Instalados filtros conforme especificação")
                 .conformidade(ConformidadeDTO.builder().id(1L).build())
                 .build();
 
@@ -204,7 +200,7 @@ class PendenciaControllerTest {
                         .content(objectMapper.writeValueAsString(pendenciaDTO)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.descricao", is("Instalação de filtros de alta performance")))
+                .andExpect(jsonPath("$.descricaoPendencia", is("Instalação de filtros de alta performance")))
                 .andExpect(jsonPath("$.resolvida", is("S")));
 
         verify(pendenciaService, times(1)).atualizar(eq(id), any(PendenciaDTO.class));
@@ -236,7 +232,7 @@ class PendenciaControllerTest {
         PendenciaDTO pendencia1 = PendenciaDTO.builder()
                 .id(1L)
                 .conformidadeId(conformidadeId)
-                .descricao("Instalação de filtros adequados")
+                .descricaoPendencia("Instalação de filtros adequados")
                 .prazoResolucao(prazoResolucao)
                 .resolvida("N")
                 .build();
@@ -244,7 +240,7 @@ class PendenciaControllerTest {
         PendenciaDTO pendencia2 = PendenciaDTO.builder()
                 .id(3L)
                 .conformidadeId(conformidadeId)
-                .descricao("Treinamento da equipe")
+                .descricaoPendencia("Treinamento da equipe")
                 .prazoResolucao(prazoResolucao.plusDays(7))
                 .resolvida("N")
                 .build();
@@ -277,7 +273,7 @@ class PendenciaControllerTest {
         PendenciaDTO pendencia1 = PendenciaDTO.builder()
                 .id(1L)
                 .conformidadeId(1L)
-                .descricao("Instalação de filtros adequados")
+                .descricaoPendencia("Instalação de filtros adequados")
                 .prazoResolucao(prazoResolucao)
                 .resolvida(status)
                 .build();
@@ -285,7 +281,7 @@ class PendenciaControllerTest {
         PendenciaDTO pendencia2 = PendenciaDTO.builder()
                 .id(3L)
                 .conformidadeId(2L)
-                .descricao("Treinamento da equipe")
+                .descricaoPendencia("Treinamento da equipe")
                 .prazoResolucao(prazoResolucao.plusDays(7))
                 .resolvida(status)
                 .build();
@@ -317,7 +313,7 @@ class PendenciaControllerTest {
         PendenciaDTO pendencia1 = PendenciaDTO.builder()
                 .id(1L)
                 .conformidadeId(1L)
-                .descricao("Instalação de filtros adequados")
+                .descricaoPendencia("Instalação de filtros adequados")
                 .prazoResolucao(dataReferencia.minusDays(5))
                 .resolvida("N")
                 .build();
@@ -325,7 +321,7 @@ class PendenciaControllerTest {
         PendenciaDTO pendencia2 = PendenciaDTO.builder()
                 .id(3L)
                 .conformidadeId(2L)
-                .descricao("Treinamento da equipe")
+                .descricaoPendencia("Treinamento da equipe")
                 .prazoResolucao(dataReferencia.minusDays(10))
                 .resolvida("N")
                 .build();
@@ -356,7 +352,7 @@ class PendenciaControllerTest {
         PendenciaDTO pendencia1 = PendenciaDTO.builder()
                 .id(1L)
                 .conformidadeId(1L)
-                .descricao("Instalação de filtros adequados")
+                .descricaoPendencia("Instalação de filtros adequados")
                 .prazoResolucao(hoje.minusDays(5))
                 .resolvida("N")
                 .build();

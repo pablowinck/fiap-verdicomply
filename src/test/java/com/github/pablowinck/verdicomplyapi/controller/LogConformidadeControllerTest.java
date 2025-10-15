@@ -19,7 +19,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,24 +51,22 @@ class LogConformidadeControllerTest {
     @DisplayName("Deve listar todos os logs de conformidade")
     void deveListarTodosOsLogs() throws Exception {
         // Arrange
-        LocalDateTime dataHora = LocalDateTime.now();
+        LocalDate dataHora = LocalDate.now();
         
         LogConformidadeDTO log1 = LogConformidadeDTO.builder()
                 .id(1L)
                 .conformidadeId(1L)
                 .acao("CRIAR")
-                .dataHora(dataHora)
-                .usuario("auditor")
-                .observacoes("Criação de conformidade")
+                .dataRegistro(dataHora)
+                .detalhes("Criação de conformidade")
                 .build();
 
         LogConformidadeDTO log2 = LogConformidadeDTO.builder()
                 .id(2L)
                 .conformidadeId(1L)
                 .acao("ATUALIZAR")
-                .dataHora(dataHora.plusHours(1))
-                .usuario("auditor")
-                .observacoes("Atualização de status de conformidade")
+                .dataRegistro(dataHora.plusDays(1))
+                .detalhes("Atualização de status de conformidade")
                 .build();
 
         List<LogConformidadeDTO> logs = Arrays.asList(log1, log2);
@@ -94,15 +92,14 @@ class LogConformidadeControllerTest {
     void deveBuscarLogPorId() throws Exception {
         // Arrange
         Long id = 1L;
-        LocalDateTime dataHora = LocalDateTime.now();
+        LocalDate dataHora = LocalDate.now();
         
         LogConformidadeDTO log = LogConformidadeDTO.builder()
                 .id(id)
                 .conformidadeId(1L)
                 .acao("CRIAR")
-                .dataHora(dataHora)
-                .usuario("auditor")
-                .observacoes("Criação de conformidade")
+                .dataRegistro(dataHora)
+                .detalhes("Criação de conformidade")
                 .conformidade(ConformidadeDTO.builder().id(1L).build())
                 .build();
 
@@ -139,23 +136,21 @@ class LogConformidadeControllerTest {
     @DisplayName("Deve criar um novo log de conformidade")
     void deveCriarNovoLog() throws Exception {
         // Arrange
-        LocalDateTime dataHora = LocalDateTime.now();
+        LocalDate dataHora = LocalDate.now();
         
         LogConformidadeDTO logDTO = LogConformidadeDTO.builder()
                 .conformidadeId(1L)
                 .acao("CRIAR")
-                .dataHora(dataHora)
-                .usuario("auditor")
-                .observacoes("Criação de conformidade")
+                .dataRegistro(dataHora)
+                .detalhes("Criação de conformidade")
                 .build();
 
         LogConformidadeDTO logCriado = LogConformidadeDTO.builder()
                 .id(1L)
                 .conformidadeId(1L)
                 .acao("CRIAR")
-                .dataHora(dataHora)
-                .usuario("auditor")
-                .observacoes("Criação de conformidade")
+                .dataRegistro(dataHora)
+                .detalhes("Criação de conformidade")
                 .conformidade(ConformidadeDTO.builder().id(1L).build())
                 .build();
 
@@ -193,24 +188,22 @@ class LogConformidadeControllerTest {
     void deveBuscarLogsPorConformidade() throws Exception {
         // Arrange
         Long conformidadeId = 1L;
-        LocalDateTime dataHora = LocalDateTime.now();
+        LocalDate dataHora = LocalDate.now();
         
         LogConformidadeDTO log1 = LogConformidadeDTO.builder()
                 .id(1L)
                 .conformidadeId(conformidadeId)
                 .acao("CRIAR")
-                .dataHora(dataHora)
-                .usuario("auditor")
-                .observacoes("Criação de conformidade")
+                .dataRegistro(dataHora)
+                .detalhes("Criação de conformidade")
                 .build();
 
         LogConformidadeDTO log2 = LogConformidadeDTO.builder()
                 .id(2L)
                 .conformidadeId(conformidadeId)
                 .acao("ATUALIZAR")
-                .dataHora(dataHora.plusHours(1))
-                .usuario("auditor")
-                .observacoes("Atualização de status de conformidade")
+                .dataRegistro(dataHora.plusDays(1))
+                .detalhes("Atualização de status de conformidade")
                 .build();
 
         List<LogConformidadeDTO> logs = Arrays.asList(log1, log2);
@@ -236,24 +229,22 @@ class LogConformidadeControllerTest {
     void deveBuscarLogsPorAcao() throws Exception {
         // Arrange
         String acao = "CRIAR";
-        LocalDateTime dataHora = LocalDateTime.now();
+        LocalDate dataHora = LocalDate.now();
         
         LogConformidadeDTO log1 = LogConformidadeDTO.builder()
                 .id(1L)
                 .conformidadeId(1L)
                 .acao(acao)
-                .dataHora(dataHora)
-                .usuario("auditor")
-                .observacoes("Criação de conformidade 1")
+                .dataRegistro(dataHora)
+                .detalhes("Criação de conformidade 1")
                 .build();
 
         LogConformidadeDTO log2 = LogConformidadeDTO.builder()
                 .id(3L)
                 .conformidadeId(2L)
                 .acao(acao)
-                .dataHora(dataHora.plusMinutes(30))
-                .usuario("auditor")
-                .observacoes("Criação de conformidade 2")
+                .dataRegistro(dataHora.plusDays(1))
+                .detalhes("Criação de conformidade 2")
                 .build();
 
         List<LogConformidadeDTO> logs = Arrays.asList(log1, log2);

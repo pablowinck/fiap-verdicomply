@@ -7,7 +7,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "AUDITORIA")
+@Table(name = "auditoria")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,20 +17,20 @@ public class Auditoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_AUDITORIA")
+    @Column(name = "id_auditoria")
     private Long id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_DEPARTAMENTO", nullable = false)
+    @JoinColumn(name = "id_departamento", nullable = false)
     private Departamento departamento;
 
-    @Column(name = "DATA_AUDITORIA")
+    @Column(name = "data_auditoria")
     private LocalDate dataAuditoria;
 
-    @Column(name = "AUDITOR_RESPONSAVEL", length = 100)
+    @Column(name = "auditor_responsavel", length = 100)
     private String auditorResponsavel;
 
-    @Column(name = "STATUS_AUDITORIA", length = 20)
+    @Column(name = "status_auditoria", length = 20)
     private String statusAuditoria;
 }

@@ -89,9 +89,8 @@ public class LogConformidadeServiceImpl implements LogConformidadeService {
                 .id(dto.getId())
                 .conformidade(conformidade)
                 .acao(dto.getAcao())
-                .dataRegistro(dto.getDataHora() != null ? dto.getDataHora().toLocalDate() : null)
-                .detalhes(dto.getObservacoes())
-                // A entidade não possui o campo usuario
+                .dataRegistro(dto.getDataRegistro())
+                .detalhes(dto.getDetalhes())
                 .build();
     }
 
@@ -105,9 +104,8 @@ public class LogConformidadeServiceImpl implements LogConformidadeService {
                 .id(log.getId())
                 .conformidadeId(log.getConformidade() != null ? log.getConformidade().getId() : null)
                 .acao(log.getAcao())
-                .dataHora(log.getDataRegistro() != null ? log.getDataRegistro().atStartOfDay() : null)
-                .usuario("Sistema") // Campo não existe na entidade, usando valor padrão
-                .observacoes(log.getDetalhes())
+                .dataRegistro(log.getDataRegistro())
+                .detalhes(log.getDetalhes())
                 .conformidade(conformidadeDTO)
                 .build();
     }

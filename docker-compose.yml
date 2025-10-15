@@ -1,29 +1,56 @@
 version: "3.8"
 
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: verdicomply-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: verdicomply
+      POSTGRES_USER: verdicomply
+      POSTGRES_PASSWORD: verdicomply
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U verdicomply -d verdicomply"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - verdicomply-network
+
   app:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: verdicomply-api
+    restart: unless-stopped
     ports:
       - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
     environment:
-      # Configurações para conexão com o Oracle da FIAP
-      - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle.fiap.com.br:1521:orcl
-      - SPRING_DATASOURCE_USERNAME=RM557024
-      - SPRING_DATASOURCE_PASSWORD=240200
-      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
-      # Configurações adicionais para retry de conexão
-      - SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT=120000
-      - SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE=10
-      - SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE=2
-      - SPRING_DATASOURCE_HIKARI_IDLE_TIMEOUT=300000
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
-      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.OracleDialect
-      - SPRING_PROFILES_ACTIVE=prod
+      # Configurações para conexão com PostgreSQL
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=verdicomply
+      - DB_USER=verdicomply
+      - DB_PASSWORD=verdicomply
       # Configurações JWT
       - JWT_SECRET=3778214125442A472D4B614E645267556B58703273357638792F423F4528472B
       - JWT_EXPIRATION=86400000
       - JWT_HEADER=Authorization
       - JWT_PREFIX=Bearer
+    networks:
+      - verdicomply-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  verdicomply-network:
+    driver: bridge

@@ -17,19 +17,20 @@ import lombok.extern.slf4j.Slf4j;
  * Inicializador de normas ambientais para ambientes de teste e produção
  * Esta classe garante que dados essenciais (como normas ambientais básicas) estão disponíveis
  */
-@Configuration
+// Desabilitado temporariamente para evitar problemas durante migração para PostgreSQL
+//@Configuration
 @Slf4j
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class NormaAmbientalInitializer {
 
     @Autowired
     private NormaAmbientalRepository normaAmbientalRepository;
-    
+
     /**
      * Inicializa as normas ambientais essenciais quando o contexto da aplicação é carregado
      */
-    @EventListener(ContextRefreshedEvent.class)
-    @Transactional
+    //@EventListener(ContextRefreshedEvent.class)
+    //@Transactional
     public void onApplicationEvent() {
         log.info("Inicializando normas ambientais essenciais");
         try {

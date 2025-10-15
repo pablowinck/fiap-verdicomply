@@ -43,7 +43,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"novo_usuario_1746481476\", // para gerar um usuário, usar api de registro\n    \"password\": \"senha123\"\n}"
+              "raw": "{\n    \"username\": \"{{admin_username}}\",\n    \"password\": \"{{admin_password}}\"\n}"
             },
             "url": {
               "raw": "{{host}}/api/public/auth/login",
@@ -128,7 +128,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"novo_usuario_1746481418\", // para gerar um usuário, usar api de registro\n    \"password\": \"senha123\"\n}"
+              "raw": "{\n    \"username\": \"{{auditor_username}}\",\n    \"password\": \"{{auditor_password}}\"\n}"
             },
             "url": {
               "raw": "{{host}}/api/public/auth/login",
@@ -320,8 +320,8 @@
                   "pm.test(\"Resposta contém dados da auditoria\", function () {",
                   "    var responseJson = pm.response.json();",
                   "    pm.expect(responseJson).to.have.property('id');",
-                  "    pm.expect(responseJson).to.have.property('descricao');",
-                  "    pm.expect(responseJson).to.have.property('status');",
+                  "    pm.expect(responseJson).to.have.property('auditorResponsavel');",
+                  "    pm.expect(responseJson).to.have.property('statusAuditoria');",
                   "    pm.expect(responseJson).to.have.property('dataAuditoria');",
                   "});"
                 ]
@@ -412,7 +412,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"descricao\": \"Auditoria Teste {{$timestamp}}\",\n    \"statusAuditoria\": \"PROGRAMADA\",\n    \"dataAuditoria\": \"2025-05-05\",\n    \"departamentoId\": 1,\n    \"auditorResponsavel\": \"Auditor Teste\",\n    \"observacoes\": \"Criado via Postman para testes\"\n}"
+              "raw": "{\n    \"statusAuditoria\": \"PROGRAMADA\",\n    \"dataAuditoria\": \"2025-05-05\",\n    \"departamentoId\": 1,\n    \"auditorResponsavel\": \"Auditor Teste {{$timestamp}}\"\n}"
             },
             "url": {
               "raw": "{{host}}/api/auditorias",
@@ -452,7 +452,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"descricao\": \"\",\n    \"status\": \"STATUS_INEXISTENTE\",\n    \"dataAuditoria\": \"data-invalida\",\n    \"departamentoId\": null\n}"
+              "raw": "{\n    \"statusAuditoria\": \"STATUS_INEXISTENTE\",\n    \"dataAuditoria\": \"data-invalida\",\n    \"departamentoId\": null,\n    \"auditorResponsavel\": \"\"\n}"
             },
             "url": {
               "raw": "{{host}}/api/auditorias",
@@ -477,8 +477,8 @@
                   "",
                   "pm.test(\"Resposta contém dados atualizados\", function () {",
                   "    var responseJson = pm.response.json();",
-                  "    pm.expect(responseJson).to.have.property('status');",
-                  "    pm.expect(responseJson.status).to.equal('EM_ANDAMENTO');",
+                  "    pm.expect(responseJson).to.have.property('statusAuditoria');",
+                  "    pm.expect(responseJson.statusAuditoria).to.equal('EM_ANDAMENTO');",
                   "});"
                 ]
               }
@@ -498,7 +498,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"descricao\": \"Auditoria Atualizada {{$timestamp}}\",\n    \"status\": \"EM_ANDAMENTO\",\n    \"dataAuditoria\": \"2025-06-15\",\n    \"departamentoId\": 1,\n    \"observacoes\": \"Atualizado via Postman para testes\"\n}"
+              "raw": "{\n    \"statusAuditoria\": \"EM_ANDAMENTO\",\n    \"dataAuditoria\": \"2025-06-15\",\n    \"departamentoId\": 1,\n    \"auditorResponsavel\": \"Auditor Atualizado {{$timestamp}}\"\n}"
             },
             "url": {
               "raw": "{{host}}/api/auditorias/{{last_auditoria_id}}",
@@ -678,7 +678,7 @@
                   "    var responseJson = pm.response.json();",
                   "    pm.expect(responseJson).to.have.property('id');",
                   "    pm.expect(responseJson).to.have.property('estaConforme');",
-                  "    pm.expect(responseJson).to.have.property('descricao');",
+                  "    pm.expect(responseJson).to.have.property('observacao');",
                   "});"
                 ]
               }
@@ -768,7 +768,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"descricao\": \"Conformidade Teste {{$timestamp}}\",\n    \"estaConforme\": \"S\",\n    \"observacoes\": \"Criado via Postman para testes\",\n    \"auditoriaId\": {{last_auditoria_id}},\n    \"normaAmbientalId\": 1\n}"
+              "raw": "{\n    \"estaConforme\": \"S\",\n    \"observacao\": \"Conformidade criada via Postman para testes {{$timestamp}}\",\n    \"auditoriaId\": 1,\n    \"normaAmbientalId\": 1\n}"
             },
             "url": {
               "raw": "{{host}}/api/conformidades",
@@ -808,7 +808,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"descricao\": \"\",\n    \"auditoriaId\": null,\n    \"normaAmbientalId\": null\n}"
+              "raw": "{\n    \"estaConforme\": \"\",\n    \"auditoriaId\": null,\n    \"normaAmbientalId\": null\n}"
             },
             "url": {
               "raw": "{{host}}/api/conformidades",
@@ -834,7 +834,7 @@
                   "pm.test(\"Resposta contém dados atualizados\", function () {",
                   "    var responseJson = pm.response.json();",
                   "    pm.expect(responseJson).to.have.property('estaConforme');",
-                  "    pm.expect(responseJson.estaConforme).to.equal(false);",
+                  "    pm.expect(responseJson.estaConforme).to.equal('N');",
                   "});"
                 ]
               }
@@ -854,7 +854,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"descricao\": \"Conformidade Atualizada {{$timestamp}}\",\n    \"estaConforme\": false,\n    \"observacoes\": \"Atualizado via Postman para testes\",\n    \"auditoriaId\": \"{{last_auditoria_id}}\",\n    \"normaAmbientalId\": 1\n}"
+              "raw": "{\n    \"estaConforme\": \"N\",\n    \"observacao\": \"Conformidade atualizada via Postman {{$timestamp}}\",\n    \"auditoriaId\": 1,\n    \"normaAmbientalId\": 1\n}"
             },
             "url": {
               "raw": "{{host}}/api/conformidades/{{last_conformidade_id}}",
@@ -1076,8 +1076,8 @@
                   "    var responseJson = pm.response.json();",
                   "    pm.expect(responseJson).to.have.property('id');",
                   "    pm.expect(responseJson).to.have.property('acao');",
-                  "    pm.expect(responseJson).to.have.property('descricao');",
-                  "    pm.expect(responseJson).to.have.property('dataHora');",
+                  "    pm.expect(responseJson).to.have.property('detalhes');",
+                  "    pm.expect(responseJson).to.have.property('dataRegistro');",
                   "});"
                 ]
               }
@@ -1167,7 +1167,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"conformidadeId\": {{last_conformidade_id}},\n    \"acao\": \"CRIACAO\",\n    \"dataHora\": \"2025-05-05T11:45:00\",\n    \"usuario\": \"admin\",\n    \"detalhes\": \"Log de teste criado via Postman {{$timestamp}}\"\n}"
+              "raw": "{\n    \"conformidadeId\": {{last_conformidade_id}},\n    \"acao\": \"CRIACAO\",\n    \"dataRegistro\": \"2025-05-05\",\n    \"detalhes\": \"Log de teste criado via Postman {{$timestamp}}\"\n}"
             },
             "url": {
               "raw": "{{host}}/api/logs",
@@ -1207,7 +1207,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"descricao\": \"\",\n    \"acao\": \"ACAO_INEXISTENTE\",\n    \"conformidadeId\": null\n}"
+              "raw": "{\n    \"detalhes\": \"\",\n    \"acao\": \"ACAO_INEXISTENTE\",\n    \"conformidadeId\": null\n}"
             },
             "url": {
               "raw": "{{host}}/api/logs",
@@ -1391,9 +1391,9 @@
                   "pm.test(\"Resposta contém dados da pendência\", function () {",
                   "    var responseJson = pm.response.json();",
                   "    pm.expect(responseJson).to.have.property('id');",
-                  "    pm.expect(responseJson).to.have.property('descricao');",
+                  "    pm.expect(responseJson).to.have.property('descricaoPendencia');",
                   "    pm.expect(responseJson).to.have.property('resolvida');",
-                  "    pm.expect(responseJson).to.have.property('dataPrazo');",
+                  "    pm.expect(responseJson).to.have.property('prazoResolucao');",
                   "});"
                 ]
               }
@@ -1483,7 +1483,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"descricao\": \"Pendência Teste {{$timestamp}}\",\n    \"resolvida\": \"N\",\n    \"prazoResolucao\": \"2025-07-10\",\n    \"conformidadeId\": {{last_conformidade_id}},\n    \"acaoCorretiva\": \"Ação corretiva a ser implementada\",\n    \"observacoes\": \"Pendência criada via teste Postman\"\n}"
+              "raw": "{\n    \"descricaoPendencia\": \"Pendência Teste {{$timestamp}}\",\n    \"resolvida\": \"N\",\n    \"prazoResolucao\": \"2025-07-10\",\n    \"conformidadeId\": {{last_conformidade_id}}\n}"
             },
             "url": {
               "raw": "{{host}}/api/pendencias",
@@ -1523,7 +1523,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"descricao\": \"\",\n    \"dataPrazo\": \"data-invalida\",\n    \"conformidadeId\": null\n}"
+              "raw": "{\n    \"descricaoPendencia\": \"\",\n    \"prazoResolucao\": \"data-invalida\",\n    \"conformidadeId\": null\n}"
             },
             "url": {
               "raw": "{{host}}/api/pendencias",
@@ -1549,7 +1549,7 @@
                   "pm.test(\"Resposta contém dados atualizados\", function () {",
                   "    var responseJson = pm.response.json();",
                   "    pm.expect(responseJson).to.have.property('resolvida');",
-                  "    pm.expect(responseJson.resolvida).to.equal(true);",
+                  "    pm.expect(responseJson.resolvida).to.equal('S');",
                   "});"
                 ]
               }
@@ -1569,7 +1569,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"descricao\": \"Pendência Atualizada {{$timestamp}}\",\n    \"resolvida\": true,\n    \"dataPrazo\": \"2025-07-15\",\n    \"conformidadeId\": \"{{last_conformidade_id}}\",\n    \"acaoCorretiva\": \"Ação corretiva implementada com sucesso\",\n    \"dataResolucao\": \"2025-06-30\"\n}"
+              "raw": "{\n    \"descricaoPendencia\": \"Pendência Atualizada {{$timestamp}}\",\n    \"resolvida\": \"S\",\n    \"prazoResolucao\": \"2025-07-15\",\n    \"conformidadeId\": {{last_conformidade_id}}\n}"
             },
             "url": {
               "raw": "{{host}}/api/pendencias/{{last_pendencia_id}}",

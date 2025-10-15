@@ -6,7 +6,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "LOG_CONFORMIDADE")
+@Table(name = "log_conformidade")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,19 +16,19 @@ public class LogConformidade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_LOG")
+    @Column(name = "id_log")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_CONFORMIDADE")
+    @JoinColumn(name = "id_conformidade")
     private Conformidade conformidade;
 
-    @Column(name = "ACAO", length = 20)
+    @Column(name = "acao", length = 20)
     private String acao;
 
-    @Column(name = "DATA_REGISTRO")
+    @Column(name = "data_registro")
     private LocalDate dataRegistro;
 
-    @Column(name = "DETALHES", length = 200)
+    @Column(name = "detalhes", length = 200)
     private String detalhes;
 }
