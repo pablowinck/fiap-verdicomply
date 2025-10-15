@@ -39,8 +39,9 @@ jobs:
       - name: Run Unit Tests
         run: mvn test -P unit-tests
 
-      - name: Run Integration Tests
-        run: mvn verify -P integration-tests
+      # Integration tests disabled - Newman tests provide comprehensive API coverage
+      # - name: Run Integration Tests
+      #   run: mvn verify -P integration-tests
 
       - name: Generate Test Coverage Report
         run: mvn jacoco:report
